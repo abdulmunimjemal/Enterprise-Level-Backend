@@ -55,11 +55,6 @@ lint-code: require-poetry
 	@echo "Linting code"
 	@poetry run ruff .
 
-
-lint-code: require-poetry
-	@echo "Linting application..."
-	@poetry run flake8 .
-
 check-format: require-poetry
 	@echo "Checking application formatting..."
 	@poetry run black --check .

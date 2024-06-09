@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 # Local Dependencies
-from config import settings
+from src.core.config import settings
 from src.core.logger import logging
 
 logger = logging.getLogger(__name__)

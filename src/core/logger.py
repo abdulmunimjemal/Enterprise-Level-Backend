@@ -4,7 +4,7 @@ import logging
 import os
 
 # Local Dependencies
-from config import settings
+from src.core.config import settings
 
 # Constants
 LOG_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs")

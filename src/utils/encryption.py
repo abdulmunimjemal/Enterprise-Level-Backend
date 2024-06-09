@@ -7,7 +7,7 @@ from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
 from Crypto.Random import get_random_bytes
 
-from src.config import settings
+from src.core.config import settings
 
 
 def generate_rsa_private_key(

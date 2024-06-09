@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 # Environment Variables Config Getters
 current_file_dir = os.path.dirname(os.path.realpath(__file__))
-ROOT_DIR = os.path.dirname(os.path.join(current_file_dir, "..", ".."))
+ROOT_DIR = os.path.dirname(os.path.join(current_file_dir, "..", "..", ".."))
 env_path = os.path.abspath(os.path.join(ROOT_DIR, ".env"))
 config = Config(env_path)
 

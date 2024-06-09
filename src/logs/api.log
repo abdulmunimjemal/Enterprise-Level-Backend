@@ -1,0 +1,69 @@
+2024-06-09 12:16:00,774 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:16:53,634 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:16:54,005 - watchfiles.main - INFO - 3 changes detected
+2024-06-09 12:17:11,360 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:17:11,740 - watchfiles.main - INFO - 3 changes detected
+2024-06-09 12:17:23,164 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:17:23,537 - watchfiles.main - INFO - 3 changes detected
+2024-06-09 12:17:29,997 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:17:30,367 - watchfiles.main - INFO - 3 changes detected
+2024-06-09 12:17:47,212 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:17:47,584 - watchfiles.main - INFO - 3 changes detected
+2024-06-09 12:17:59,021 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:17:59,392 - watchfiles.main - INFO - 3 changes detected
+2024-06-09 12:18:03,224 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:18:03,590 - watchfiles.main - INFO - 3 changes detected
+2024-06-09 12:18:05,607 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:18:05,974 - watchfiles.main - INFO - 3 changes detected
+2024-06-09 12:18:30,911 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:18:31,281 - watchfiles.main - INFO - 3 changes detected
+2024-06-09 12:18:42,797 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:18:43,174 - watchfiles.main - INFO - 3 changes detected
+2024-06-09 12:18:46,148 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:18:46,516 - watchfiles.main - INFO - 3 changes detected
+2024-06-09 12:18:49,694 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:18:50,065 - watchfiles.main - INFO - 3 changes detected
+2024-06-09 12:18:57,354 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:18:57,936 - watchfiles.main - INFO - 3 changes detected
+2024-06-09 12:19:12,652 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:19:13,025 - watchfiles.main - INFO - 3 changes detected
+2024-06-09 12:19:48,357 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:19:48,888 - watchfiles.main - INFO - 3 changes detected
+2024-06-09 12:19:55,810 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:19:56,381 - watchfiles.main - INFO - 3 changes detected
+2024-06-09 12:20:10,797 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:20:10,976 - app - INFO - API Shutdown
+2024-06-09 12:20:11,353 - watchfiles.main - INFO - 4 changes detected
+2024-06-09 12:20:17,230 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:20:17,430 - app - INFO - API Shutdown
+2024-06-09 12:20:17,816 - watchfiles.main - INFO - 4 changes detected
+2024-06-09 12:20:35,244 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:20:35,391 - app - INFO - API Shutdown
+2024-06-09 12:20:35,771 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:20:59,540 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:20:59,717 - app - INFO - API Shutdown
+2024-06-09 12:21:00,104 - watchfiles.main - INFO - 4 changes detected
+2024-06-09 12:21:27,056 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:21:27,238 - app - INFO - API Shutdown
+2024-06-09 12:21:27,613 - watchfiles.main - INFO - 4 changes detected
+2024-06-09 12:21:42,998 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:21:43,177 - app - INFO - API Shutdown
+2024-06-09 12:21:43,554 - watchfiles.main - INFO - 4 changes detected
+2024-06-09 12:22:26,637 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:22:26,811 - app - INFO - API Shutdown
+2024-06-09 12:22:27,188 - watchfiles.main - INFO - 4 changes detected
+2024-06-09 12:22:37,009 - watchfiles.main - INFO - 1 change detected
+2024-06-09 12:22:37,154 - app - INFO - API Shutdown
+2024-06-09 12:22:37,529 - watchfiles.main - INFO - 4 changes detected
+2024-06-09 12:23:04,785 - app - INFO - API Shutdown
+2024-06-09 12:37:03,452 - httpx - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2024-06-09 12:37:41,946 - httpx - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2024-06-09 12:37:50,808 - httpx - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2024-06-09 12:39:09,659 - httpx - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2024-06-09 12:39:54,694 - httpx - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2024-06-09 12:40:53,194 - httpx - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2024-06-09 12:43:04,350 - httpx - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2024-06-09 12:43:12,984 - httpx - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2024-06-09 12:43:17,684 - httpx - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2024-06-09 12:43:25,627 - httpx - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2024-06-09 12:43:36,611 - httpx - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"

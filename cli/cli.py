@@ -1,14 +1,7 @@
 import click
-from src.config import Settings
+from src.core.config import Settings
 from rich.console import Console
 import os
-
-
-##################
-# Config
-##################
-def load_config_yaml(ctx, param, value) -> Settings:
-    return Settings.load_config_yaml(value.name)
 
 
 def add_options(options):
@@ -20,15 +13,7 @@ def add_options(options):
     return _add_options
 
 
-_config_options = [
-    click.option(
-        "--config",
-        default="pybe_config.yaml",
-        help="Configuration file",
-        type=click.File(mode="r"),
-        callback=load_config_yaml,
-    )
-]
+_config_options = []
 
 
 @click.group()
@@ -45,14 +30,13 @@ def cli(ctx, debug: bool):
 @click.option("--host", default="127.0.0.1", help="Host interface to bind")
 @click.option("--port", default=8000, help="Port to bind")
 @click.option("--reload/--no-reload", default=False, help="Enable auto-reload")
-def serve(config: Settings, host, port, reload):
+def serve(host, port, reload):
     import uvicorn
-    from src.main import create_app
 
     console = Console()
-    console.log("[bold green]Starting server...[/bold]")
-    app = create_app(config)
-    uvicorn.run(app, host=host, port=port, log_level="info", reload=reload)
+    console.log("[bold green]Starting server...[/bold green]")
+
+    uvicorn.run("main:app", host=host, port=port, log_level="info", reload=reload)
 
 
 @cli.command()

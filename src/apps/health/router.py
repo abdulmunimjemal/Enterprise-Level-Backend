@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 from fastapi import APIRouter, status
 import psutil
 
+from core.config import get_settings
 from .schemas import APIStatus
 
 router = APIRouter(prefix="/health", tags=["health"])
@@ -14,9 +15,10 @@ router = APIRouter(prefix="/health", tags=["health"])
     response_model=APIStatus,
 )
 async def health_check() -> APIStatus:
+    cfg = get_settings()
     return APIStatus(
         status="ok",
         timestamp=datetime.now(timezone.utc),
         uptime=psutil.boot_time(),
-        message="Service is running smoothly",
+        version=cfg.APP_VERSION,
     )

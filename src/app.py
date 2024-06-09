@@ -13,7 +13,7 @@ from db.session import async_engine as engine
 from core.models import Base
 from core.logger import logging
 from utils.system_info import log_system_info
-from config import (
+from core.config import (
     AppSettings,
     DatabaseSettings,
     CORSSettings,
@@ -21,6 +21,8 @@ from config import (
     EnvironmentSettings,
     EnvironmentOption,
 )
+
+from apps import router as api_router
 
 # Logger instance for the current module
 logger = logging.getLogger(__name__)
@@ -39,7 +41,7 @@ async def set_threadpool_tokens(number_of_tokens: int = 100) -> None:
 
 async def ensure_private_key_exists() -> None:
     # Function to ensure private key exists
-    from config import settings
+    from src.core.config import settings
     import os
 
     if not os.path.exists(settings.PRIVATE_KEY_PATH):
@@ -57,8 +59,8 @@ async def shutdown_logging() -> None:
 @asynccontextmanager
 async def lifespan(entrypoint: FastAPI):
     await ensure_private_key_exists()
-    yield entrypoint
-    shutdown_logging()
+    yield
+    await shutdown_logging()
 
 
 def create_app(
@@ -83,6 +85,7 @@ def create_app(
         kwargs.update({"docs_url": None, "redoc_url": None, "openapi_url": None})
 
     app_ = FastAPI(lifespan=lifespan, **kwargs)
+
     if isinstance(settings, SecuritySettings):
         app_.add_event_handler("startup", ensure_private_key_exists)
 
@@ -126,4 +129,5 @@ def create_app(
                     return out
 
             app_.include_router(docs_router)
-        return app_
+    app_.include_router(api_router)
+    return app_
