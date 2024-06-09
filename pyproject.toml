@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "mmbackend"
+version = "0.1.0"
+description = ""
+authors = ["Ari <me@ari.io>"]
+readme = "README.md"
+packages = [{ include = "src", from = "." }]
+
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.111.0"
+uvicorn = "^0.30.1"
+python-dotenv = "^1.0.1"
+sqlmodel = "^0.0.19"
+psutil = "^5.9.8"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest-watch = "^4.2.0"
+pyclean = "^3.0.0"
+black = "^24.4.2"
+flake8 = "^7.0.0"
+flake8-pyproject = "^1.2.3"
+httpx = "^0.27.0"
+pytest = "^8.2.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
