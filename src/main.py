@@ -1,28 +1,10 @@
-from contextlib import asynccontextmanager
-from os import getenv
+from config import get_settings
+from app import create_app
+from apps import router
 
-from dotenv import load_dotenv
-from fastapi import FastAPI
+app = create_app(router=router, settings=get_settings())
 
-load_dotenv()
+if __name__ == "__main__":
+    import uvicorn
 
-
-@asynccontextmanager
-async def lifespan(entrypoint: FastAPI):
-    try:
-        yield
-    finally:
-        pass
-
-
-app = FastAPI(
-    lifespan=lifespan,
-    title=getenv("APP_NAME", "Moodme Backend"),
-    version=getenv("APP_VERSION", "0.1.0"),
-    description=getenv("APP_DESCRIPTION", "A backend for Moodme"),
-    contact={
-        "name": getenv("APP_CONTACT_NAME", "Moodme Team"),
-        "url": getenv("APP_CONTACT_URL", "https://moodme.io"),
-        "email": getenv("APP_CONTACT_EMAIL", "ari@mood-me.com"),
-    },
-)
+    uvicorn.run(app, host="0.0.0.0", port=8000)

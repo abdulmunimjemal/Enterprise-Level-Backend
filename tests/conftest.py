@@ -13,7 +13,7 @@ conftest.py files in parent directories.
 import pytest
 from starlette.testclient import TestClient
 
-from src import main
+from src import app
 
 
 @pytest.fixture(scope="module")

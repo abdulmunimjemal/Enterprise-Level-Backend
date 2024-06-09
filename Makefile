@@ -10,6 +10,22 @@ clean-app: require-poetry
 	@echo "Cleaning application"
 	@poetry run pyclean -v .
 
+build-app: require-poetry
+	@echo "Building application"
+	@poetry install
+
+test-app: install-dependencies
+	@echo "Testing application"
+	@poetry run pytest -v .
+
+dev-app: build-app
+	@echo "Running application"
+	@poetry run pybe serve --host localhost --port 8000 --reload
+
+run-app: build-app
+	@echo "Running application"
+	@poetry run pybe serve --host 0.0.0.0 --port 80
+
 # Dev ###################################
 require-poetry:
 	@echo "Checking for poetry"
@@ -27,7 +43,7 @@ update-dependencies: require-poetry
 	@echo "Updating dependencies"
 	@poetry update
 
-lock-dependencies: require-poetry:
+lock-dependencies: require-poetry
 	@echo "Locking dependencies"
 	@poetry lock
 
