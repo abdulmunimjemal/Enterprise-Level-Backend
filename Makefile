@@ -34,9 +34,13 @@ migration-new: install-dependencies
 	@echo "Generating new migration"
 	@poetry run alembic revision --autogenerate -m "${name}"
 
-migration-run: install-dependencies
+migration-up: install-dependencies
 	@echo "Running migrations"
 	@poetry run alembic upgrade head
+
+migration-down: install-dependencies
+	@echo "Rolling back migrations"
+	@poetry run alembic downgrade head
 
 # Dev ###################################
 require-poetry:

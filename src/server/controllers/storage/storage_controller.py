@@ -1,7 +1,7 @@
 import boto3
 from botocore.exceptions import ClientError
 from typing import List
-from controllers.aws import s3
+from server.controllers.aws import s3
 
 from .schemas import ShowBucket
 

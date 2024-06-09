@@ -1,5 +1,5 @@
 import pytest
-from src.controllers.storage.storage_controller import StorageController
+from src.server.controllers.storage.storage_controller import StorageController
 
 
 @pytest.mark.anyio

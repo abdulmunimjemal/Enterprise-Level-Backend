@@ -39,6 +39,8 @@ class DatabaseSettings(BaseSettings):
 
 class SecuritySettings(BaseSettings):
     PRIVATE_KEY_PATH: str = config("PRIVATE_KEY_PATH", default="./certs/privkey.pem")
+    JWT_SECRET_KEY: str = config("JWT_SECRET_KEY", default="n0ts3cr3t")
+    JWT_EXPIRATION_MINUTES: int = config("JWT_EXPIRATION_MINUTES", default=60)
 
 
 class StorageSettings(BaseSettings):

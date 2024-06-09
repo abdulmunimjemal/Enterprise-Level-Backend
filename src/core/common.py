@@ -1,4 +1,4 @@
-from datetime import datetime, UTC
+from datetime import datetime
 from uuid import UUID, uuid4
 from typing import Optional, Any
 
@@ -23,13 +23,13 @@ class TimestampMixin(SQLModel):
 
     created_at: datetime = Field(
         sa_type=DateTime(timezone=True),
-        default_factory=lambda: datetime.now(UTC),
+        default_factory=lambda: datetime.utcnow(),
         description="Timestamp for the creation of the record",
     )
     updated_at: datetime = Field(
         sa_type=DateTime(timezone=True),
-        default_factory=lambda: datetime.now(UTC),
-        sa_column_kwargs={"onupdate": datetime.now(UTC)},
+        default_factory=lambda: datetime.utcnow(),
+        sa_column_kwargs={"onupdate": datetime.utcnow()},
         description="Timestamp for the last update of the record",
     )
 
