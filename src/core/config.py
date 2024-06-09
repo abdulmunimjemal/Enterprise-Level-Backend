@@ -1,4 +1,4 @@
-from typing import List, Any, Annotated, TypeVar
+from typing import List, Any, Annotated, TypeVar, Optional
 from enum import Enum
 from pydantic import PostgresDsn, field_validator, Field
 from pydantic_settings import BaseSettings
@@ -26,6 +26,13 @@ class AppSettings(BaseSettings):
     APP_VERSION: str = config("APP_VERSION", default="0.1.0")
 
 
+class AWSSettings(BaseSettings):
+    AWS_PROFILE: Optional[str] = config("AWS_PROFILE", default="default")
+    AWS_REGION: Optional[str] = config("AWS_REGION", default="us-east-1")
+    AWS_ACCESS_KEY_ID: Optional[str] = config("AWS_ACCESS_KEY_ID", default=None)
+    AWS_SECRET_ACCESS_KEY: Optional[str] = config("AWS_SECRET_ACCESS_KEY", default=None)
+
+
 class DatabaseSettings(BaseSettings):
     pass
 
@@ -36,6 +43,7 @@ class SecuritySettings(BaseSettings):
 
 class StorageSettings(BaseSettings):
     STORAGE_PATH: str = config("STORAGE_PATH", default="/tmp")
+    MODEL_PATH: str = config("MODEL_PATH", default="/tmp/models")
 
 
 class PostgresSettings(DatabaseSettings):
@@ -91,6 +99,7 @@ class EnvironmentSettings(BaseSettings):
 
 class Settings(
     AppSettings,
+    AWSSettings,
     SecuritySettings,
     PostgresSettings,
     StorageSettings,

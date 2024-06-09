@@ -9,4 +9,5 @@ certs/*.DS_Store
 certs/
 pybe/logs/
 .pytest_cache
-.venvcerts/
+certs/
+.venv

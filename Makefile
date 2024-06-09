@@ -18,6 +18,10 @@ test-app: install-dependencies
 	@echo "Testing application"
 	@poetry run pytest -v .
 
+watch-test-app: install-dependencies
+	@echo "Watching tests"
+	@poetry run ptw
+
 dev-app: build-app
 	@echo "Running application"
 	@poetry run pybe serve --host localhost --port 8000 --reload
@@ -25,6 +29,14 @@ dev-app: build-app
 run-app: build-app
 	@echo "Running application"
 	@poetry run pybe serve --host 0.0.0.0 --port 80
+
+migration-new: install-dependencies
+	@echo "Generating new migration"
+	@poetry run alembic revision --autogenerate -m "${name}"
+
+migration-run: install-dependencies
+	@echo "Running migrations"
+	@poetry run alembic upgrade head
 
 # Dev ###################################
 require-poetry:

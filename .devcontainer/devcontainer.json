@@ -15,6 +15,20 @@
     // This can be used to network with other containers or the host.
     "forwardPorts": [
         8000
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.makefile-tools"
+            ]
+        }
+    },
+    "mounts": [
+        {
+            "source": "${localEnv:HOME}/.aws/",
+            "target": "/root/.aws",
+            "type": "bind"
+        }
     ]
     // Use 'postCreateCommand' to run commands after the container is created.
     // "postCreateCommand": "pip install --user -r requirements.txt",

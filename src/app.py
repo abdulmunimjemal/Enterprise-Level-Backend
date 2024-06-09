@@ -57,8 +57,10 @@ async def shutdown_logging() -> None:
 
 
 @asynccontextmanager
-async def lifespan(entrypoint: FastAPI):
+async def lifespan(_entrypoint: FastAPI):
     await ensure_private_key_exists()
+    await set_threadpool_tokens()
+    await create_tables()
     yield
     await shutdown_logging()
 
