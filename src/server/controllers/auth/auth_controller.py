@@ -30,12 +30,9 @@ class AuthController:
         """
         Create a new user in the users table
         """
-        print(f"USER USER: {User}")
         # db = async_get_db()
         # Does the user already exist?
-        print(f"Username: {create_user.username}")
-        print(f"User: {User}")
-        query = select(User)#.where(User.username == create_user.username)
+        query = select(User).where(User.username == create_user.username)
         res = await db.exec(query)
         if res.first():
             raise Exception("Email already exists")

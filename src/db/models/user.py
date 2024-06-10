@@ -8,14 +8,14 @@ from core.common import (
     TimestampMixin
 )
 
-class BaseUser(
+class User(
     Base,
     UUIDMixin,
     TimestampMixin,
     SoftDeleteMixin,
     table=True
 ):
-    __tablename__ = "user"
+    __tablename__ = "users"
     # __table_args__ = {'extend_existing': True}
 
     first_name: Optional[str] = Field(default=None, max_length=255)
@@ -25,6 +25,3 @@ class BaseUser(
         nullable=False, description="Hashed password for user auth"
     )
 
-
-class User(BaseUser):
-    pass

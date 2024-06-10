@@ -457,3 +457,115 @@ DROP TABLE user
 2024-06-09 22:38:37,705 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
 2024-06-09 22:38:54,889 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
 2024-06-09 22:38:55,452 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 08:31:05,056 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 08:31:05,632 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 18:05:21,982 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 18:05:22,597 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 18:06:03,308 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 18:06:03,862 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 18:06:19,520 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 18:06:31,503 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 18:48:20,247 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 18:48:20,840 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 18:48:52,546 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 18:48:53,063 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 18:50:05,408 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 18:50:06,153 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 18:50:46,783 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 18:50:47,341 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 18:51:05,223 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 18:51:05,796 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 22:05:52,943 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 22:06:10,039 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 22:06:10,625 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 22:37:11,574 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 22:37:34,901 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 22:37:35,475 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 22:45:52,103 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 22:45:52,726 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 22:46:06,187 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 22:46:06,707 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 22:46:22,680 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 22:46:23,125 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 22:46:38,634 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 22:46:39,113 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 22:46:43,534 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 22:46:43,960 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 22:47:01,026 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 22:47:01,631 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 22:59:43,192 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 22:59:55,872 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:00:09,945 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:00:24,561 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:00:25,091 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 23:00:35,070 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:00:52,793 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:00:53,300 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 23:01:38,372 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:01:38,960 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 23:11:17,097 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:11:17,319 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-06-10 23:11:17,321 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("users")
+2024-06-10 23:11:17,324 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2024-06-10 23:11:17,347 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("users")
+2024-06-10 23:11:17,348 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2024-06-10 23:11:17,350 - sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE users (
+	deleted_at DATETIME, 
+	is_deleted BOOLEAN NOT NULL, 
+	created_at DATETIME NOT NULL, 
+	updated_at DATETIME NOT NULL, 
+	id CHAR(32) NOT NULL, 
+	first_name VARCHAR(255), 
+	last_name VARCHAR(255), 
+	username VARCHAR(255), 
+	hashed_password VARCHAR NOT NULL, 
+	PRIMARY KEY (id)
+)
+
+
+2024-06-10 23:11:17,350 - sqlalchemy.engine.Engine - INFO - [no key 0.00044s] ()
+2024-06-10 23:11:17,375 - sqlalchemy.engine.Engine - INFO - CREATE INDEX ix_users_id ON users (id)
+2024-06-10 23:11:17,375 - sqlalchemy.engine.Engine - INFO - [no key 0.00042s] ()
+2024-06-10 23:11:17,377 - sqlalchemy.engine.Engine - INFO - CREATE INDEX ix_users_is_deleted ON users (is_deleted)
+2024-06-10 23:11:17,377 - sqlalchemy.engine.Engine - INFO - [no key 0.00025s] ()
+2024-06-10 23:11:18,020 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 23:11:18,021 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("users")
+2024-06-10 23:11:18,021 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2024-06-10 23:11:18,022 - sqlalchemy.engine.Engine - INFO - 
+DROP TABLE users
+2024-06-10 23:11:18,023 - sqlalchemy.engine.Engine - INFO - [no key 0.00032s] ()
+2024-06-10 23:11:18,024 - sqlalchemy.engine.Engine - INFO - COMMIT
+2024-06-10 23:12:12,558 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:12:13,187 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 23:12:25,204 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:12:25,891 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 23:12:42,018 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:13:04,678 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:13:05,522 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 23:13:18,678 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:13:19,366 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 23:13:32,806 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:13:33,530 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 23:14:51,882 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:14:52,723 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 23:14:58,705 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:14:59,367 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 23:15:08,970 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:15:09,765 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 23:15:38,712 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:15:39,516 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 23:15:45,818 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:15:46,501 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 23:15:52,311 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:15:52,981 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 23:16:32,981 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:16:34,060 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 23:17:04,302 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:17:05,084 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 23:17:24,542 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:17:25,243 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 23:18:21,099 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:18:21,791 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-10 23:18:27,626 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-10 23:18:28,395 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
