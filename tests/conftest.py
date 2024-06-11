@@ -18,21 +18,28 @@ from src.core.config import Settings, get_settings
 from src.core.models import Base
 from src.db.session import async_get_db
 
-test_async_engine = create_async_engine("sqlite+aiosqlite://", poolclass=StaticPool, echo=False)
+from .utils import user
 
+# test_async_engine = create_async_engine("sqlite+aiosqlite://", poolclass=StaticPool, echo=False)
+test_async_engine = create_async_engine(
+    "sqlite+aiosqlite://", 
+    connect_args={"check_same_thread": False}, 
+    poolclass=StaticPool,
+    echo=False
+)
 
 @pytest.fixture(scope="session", params=["asyncio"])
 def anyio_backend(request):
-    return "asyncio"
+    return request.param
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 async def connection(anyio_backend) -> AsyncGenerator[AsyncConnection, None]:
     async with test_async_engine.connect() as connection:
         yield connection
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 async def transaction(
     connection: AsyncConnection,
 ) -> AsyncGenerator[AsyncTransaction, None]:
@@ -40,7 +47,7 @@ async def transaction(
         yield transaction
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 async def session(
     connection: AsyncConnection,
     transaction: AsyncTransaction
@@ -57,7 +64,7 @@ async def session(
 class TestSettings(Settings):
     STORAGE_PATH: str = "/tmp/tests"
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 async def client(
     app,
     connection: AsyncConnection,
@@ -67,7 +74,7 @@ async def client(
     transport = ASGITransport(app=app)
     async_client = AsyncClient(transport=transport, base_url="http://testserver")
 
-    # app.dependency_overrides[async_get_db] = lambda: session
+    app.dependency_overrides[async_get_db] = lambda: session
     app.dependency_overrides[get_settings] = lambda: TestSettings()
 
     await app.router.startup()

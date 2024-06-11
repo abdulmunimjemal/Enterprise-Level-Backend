@@ -7,9 +7,11 @@ from sqlalchemy import pool
 from alembic import context
 
 
-from core.models import Base
-from core.config import settings
-from db.models import *
+from src.db.models import Base
+from src.db.models import *
+from src.core.config import get_settings
+
+settings = get_settings()
 
 custom_alembic_version_table_name = "_alembic_version"
 

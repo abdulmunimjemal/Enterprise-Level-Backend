@@ -20,7 +20,7 @@ class User(
 
     first_name: Optional[str] = Field(default=None, max_length=255)
     last_name: Optional[str] = Field(default=None, max_length=255)
-    username: Optional[str] = Field(default=None, max_length=255)
+    email: Optional[str] = Field(default=None, max_length=255)
     hashed_password: str = Field(
         nullable=False, description="Hashed password for user auth"
     )
