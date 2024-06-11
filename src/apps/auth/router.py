@@ -16,6 +16,7 @@ from server.controllers.auth.schemas import (
     Token,
     CreateUser,
     LoginUser,
+    UserResponse
 )
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -32,7 +33,7 @@ async def signup(
     except Exception as e:
         raise HTTPException(status_code=400, detail="User already exists")
 
-@router.post("/login", response_model=Token)
+@router.post("/token", response_model=Token)
 async def login(
     db: Annotated[AsyncSession, Depends(get_async_db)],
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -48,9 +49,9 @@ async def login(
     access_token = await AuthController.create_access_token(user)
     return Token(access_token=access_token, token_type="bearer")
 
-@router.get("/me", response_model=User)
+@router.get("/me", response_model=UserResponse)
 async def me(
-    current_user: Annotated[User, Depends(get_current_user)],
+    current_user: Annotated[UserResponse, Depends(get_current_user)],
 ) -> User:
     return current_user
 
