@@ -121,3 +121,16 @@ async def test_authenticate_unexistant_user(session: AsyncSession):
     ))
     assert auth_user is None
 
+@pytest.mark.anyio
+async def test_create_access_token(session: AsyncSession, user: User):
+    token = await AuthController.create_access_token(user)
+    assert token is not None
+
+@pytest.mark.anyio
+async def test_get_current_user_with_token(session: AsyncSession, user: User):
+    token = await AuthController.create_access_token(user)
+    print(f"token: {token}")
+    assert token is not None
+    user = await AuthController.get_current_user(session, token)
+    assert user is not None
+

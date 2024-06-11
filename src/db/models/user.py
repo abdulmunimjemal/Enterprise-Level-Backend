@@ -1,7 +1,7 @@
 from typing import Optional, List
 from sqlmodel import Field, Relationship
 
-from core.common import (
+from src.core.common import (
     SoftDeleteMixin,
     UUIDMixin,
     Base,

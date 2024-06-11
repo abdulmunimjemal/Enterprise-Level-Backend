@@ -1,11 +1,12 @@
 from typing import Annotated, Dict
 from sqlmodel.ext.asyncio.session import AsyncSession
 # from fastapi.security import OAuth2PasswordBearer
+import requests
 from jose import jwt
 from jose.exceptions import JWTError
 from passlib.context import CryptContext
 from sqlmodel import Session, select, delete
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from db.models.user import User
 from core.config import get_settings
@@ -91,52 +92,42 @@ class AuthController:
 
     @staticmethod
     async def create_access_token(user: User):
-        expire = datetime.datetime.now() + datetime.timedelta(minutes=EXPIRATION_MINUTES)
+        expire = datetime.now() + timedelta(minutes=EXPIRATION_MINUTES)
         public_user = UserResponse.model_validate(user.model_dump(mode="json"))
         to_encode = {"exp": expire, "sub": user.email, "user": public_user.model_dump(mode="json")}
         encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm="HS256")
         return encoded_jwt
 
 
-    # @staticmethod
-    # async def get_current_user(token: str, db: AsyncSession) -> User:
-    #     # first try to decode the token using our auth
-    #     try:
-    #         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-    #         email: str = payload.get("sub")
-    #         if email is None:
-    #             raise Exception("Could not validate credentials")
+    @staticmethod
+    async def get_current_user(db: AsyncSession, token: str) -> User:
+        # first try to decode the token using our auth
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            email: str = payload.get("sub")
+            if email is None:
+                raise Exception("Could not validate credentials")
 
-    #         user = db.exec(select(User).where(User.email == email)).first()
-    #         if user is None:
-    #             raise Exception("Could not validate credentials")
+            user = await db.exec(select(User).where(User.email == email))
+            user = user.first()
+            if user is None:
+                raise Exception("Could not validate credentials")
 
-    #     # if the token is not from our auth, try to decode it using google auth
-    #     except JWTError:
-    #         try:
-    #             request = requests.Request()
+        # if the token is not from our auth, try to decode it using facebook auth
+        except JWTError:
+            try:
+                user = await AuthController.get_facebook_user(token) or await AuthController.get_google_user(token)
+                return user
+            except Exception:
+                raise Exception("Could not validate credentials")
 
-    #             id_info = id_token.verify_oauth2_token(token, request, os.getenv("GOOGLE_CLIENT_ID"))
-    #             email = id_info["email"]
+        return user
 
-    #             user = db.exec(select(User).where(User.email == email)).first()
-    #             if user is None:
-    #                 # first time a user logs in with google, create a new user
-    #                 new_user = CreateUser(
-    #                     username=id_info["name"],
-    #                     email=email,
-    #                     password="",
-    #                 )
-    #                 user = await AuthController.create_user(db, new_user, oauth=True)
+    @staticmethod
+    async def get_facebook_user(token: str):
+        pass
 
-    #             if id_info.get("picture") and user.image != id_info["picture"]:
-    #                 user.image = id_info["picture"]
-    #                 db.add(user)
-    #                 db.flush()
-    #                 db.refresh(user)
-
-    #         except Exception:
-    #             raise Exception("Could not validate credentials")
-
-    #     return user
+    @staticmethod
+    async def get_google_user(token: str):
+        pass
 
