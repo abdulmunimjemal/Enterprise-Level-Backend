@@ -16,7 +16,7 @@ from starlette.testclient import TestClient
 from src import app
 from src.core.config import Settings, get_settings
 from src.core.models import Base
-from src.db.session import async_get_db
+from src.db.session import get_async_db
 
 from .utils import user
 
@@ -74,7 +74,7 @@ async def client(
     transport = ASGITransport(app=app)
     async_client = AsyncClient(transport=transport, base_url="http://testserver")
 
-    app.dependency_overrides[async_get_db] = lambda: session
+    app.dependency_overrides[get_async_db] = lambda: session
     app.dependency_overrides[get_settings] = lambda: TestSettings()
 
     await app.router.startup()

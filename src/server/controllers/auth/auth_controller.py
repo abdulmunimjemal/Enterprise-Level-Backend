@@ -1,5 +1,6 @@
 from typing import Annotated, Dict
 from sqlmodel.ext.asyncio.session import AsyncSession
+from fastapi import Depends
 # from fastapi.security import OAuth2PasswordBearer
 import requests
 from jose import jwt
@@ -8,10 +9,11 @@ from passlib.context import CryptContext
 from sqlmodel import Session, select, delete
 from datetime import datetime, timedelta
 
+from db.session import get_async_db
 from db.models.user import User
 from core.config import get_settings
 
-# from db.session import async_get_db
+# from db.session import get_async_db
 from server.dependencies import oauth2_scheme
 
 from .schemas import (
@@ -36,7 +38,7 @@ class AuthController:
         """
         Create a new user in the users table
         """
-        # db = async_get_db()
+        # db = get_async_db()
         # Does the user already exist?
         query = select(User).where(User.email == create_user.email)
         res = await db.exec(query)                      
@@ -99,35 +101,35 @@ class AuthController:
         return encoded_jwt
 
 
-    @staticmethod
-    async def get_current_user(db: AsyncSession, token: str) -> User:
-        # first try to decode the token using our auth
+async def get_current_user(
+    db: AsyncSession = Depends(get_async_db),
+    token: str = Depends(oauth2_scheme)
+) -> User:
+    # first try to decode the token using our auth
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        email: str = payload.get("sub")
+        if email is None:
+            raise Exception("Could not validate credentials")
+
+        user = await db.exec(select(User).where(User.email == email))
+        user = user.first()
+        if user is None:
+            raise Exception("Could not validate credentials")
+
+    # if the token is not from our auth, try to decode it using facebook auth
+    except JWTError:
         try:
-            payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-            email: str = payload.get("sub")
-            if email is None:
-                raise Exception("Could not validate credentials")
+            user = await AuthController.get_facebook_user(token) or await AuthController.get_google_user(token)
+            return user
+        except Exception:
+            raise Exception("Could not validate credentials")
 
-            user = await db.exec(select(User).where(User.email == email))
-            user = user.first()
-            if user is None:
-                raise Exception("Could not validate credentials")
+    return user
 
-        # if the token is not from our auth, try to decode it using facebook auth
-        except JWTError:
-            try:
-                user = await AuthController.get_facebook_user(token) or await AuthController.get_google_user(token)
-                return user
-            except Exception:
-                raise Exception("Could not validate credentials")
+async def get_facebook_user(token: str):
+    pass
 
-        return user
-
-    @staticmethod
-    async def get_facebook_user(token: str):
-        pass
-
-    @staticmethod
-    async def get_google_user(token: str):
-        pass
+async def get_google_user(token: str):
+    pass
 

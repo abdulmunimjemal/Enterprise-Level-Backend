@@ -24,11 +24,17 @@ local_session = sessionmaker(
 
 
 # Define an async function to get the database session
-async def async_get_db() -> AsyncSession:
+async def get_async_db() -> AsyncSession:
     logger.info(f"Creating session with engine URL")
 
     async_session = local_session
 
     async with async_session() as db:
-        yield db
-        await db.commit()
+        try:
+            yield db
+            await db.commit()
+        except Exception as e:
+            await db.rollback()
+            raise e
+        finally:
+            await db.close()

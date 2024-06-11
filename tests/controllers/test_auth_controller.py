@@ -4,7 +4,7 @@ from sqlmodel import Session, select, delete
 from passlib.context import CryptContext
 
 from db.models.user import User
-from server.controllers.auth.auth_controller import AuthController
+from server.controllers.auth.auth_controller import AuthController, get_current_user
 from server.controllers.auth.schemas import (
     CreateUser,
     LoginUser
@@ -131,6 +131,6 @@ async def test_get_current_user_with_token(session: AsyncSession, user: User):
     token = await AuthController.create_access_token(user)
     print(f"token: {token}")
     assert token is not None
-    user = await AuthController.get_current_user(session, token)
+    user = await get_current_user(session, token)
     assert user is not None
 
