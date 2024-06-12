@@ -23,7 +23,4 @@ class AiModel(
     url_or_path: str = Field(..., description="The path to the model")
     version: str = Field(..., description="The version of the model")
     details: dict = Field(sa_column=Column(JSON), default={})
-
-
-
-
+    sha256: str = Field(..., description="The SHA256 hash of the model")

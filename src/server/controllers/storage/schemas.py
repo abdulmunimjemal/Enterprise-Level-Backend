@@ -14,4 +14,5 @@ class ModelResponse(BaseModel):
     description: Optional[str] = Field(..., description="The description of the model")
     version: str = Field(..., description="The version of the model")
     details: dict = Field(..., description="The details of the model")
+    sha256: str = Field(..., description="The SHA256 hash of the model")
 

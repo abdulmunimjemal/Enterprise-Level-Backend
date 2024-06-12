@@ -16,8 +16,15 @@ class ModelController:
         return [ModelResponse(**model.model_dump()) for model in models]
 
     @staticmethod
-    async def get_model(db: AsyncSession, model_name: str):
-        return []
+    async def get_model_info(db: AsyncSession, model_name: str) -> ModelResponse:
+        query = select(AiModel).where(AiModel.name == model_name)
+        model = await db.exec(query)
+        return ModelResponse(**model.model_dump())
+
+    @staticmethod
+    async def download_model(db: AsyncSession, model_name: str):
+        # Blocking, for now
+        pass
 
     @staticmethod
     async def create_model(db: AsyncSession, create_model: CreateModel) -> ModelResponse:
