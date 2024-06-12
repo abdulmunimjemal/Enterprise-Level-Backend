@@ -1,7 +1,7 @@
 import boto3
 from botocore.exceptions import ClientError
 from typing import List
-from server.controllers.aws import s3
+from utils.aws import s3
 
 from core.config import get_settings
 from .schemas import (

@@ -946,3 +946,5 @@ DROP TABLE users
 2024-06-12 01:25:10,969 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
 2024-06-12 01:25:17,603 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
 2024-06-12 01:25:20,532 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-12 01:33:45,064 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-12 01:33:47,723 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
