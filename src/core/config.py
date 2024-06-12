@@ -31,6 +31,7 @@ class AWSSettings(BaseSettings):
     AWS_REGION: Optional[str] = config("AWS_REGION", default="us-east-1")
     AWS_ACCESS_KEY_ID: Optional[str] = config("AWS_ACCESS_KEY_ID", default=None)
     AWS_SECRET_ACCESS_KEY: Optional[str] = config("AWS_SECRET_ACCESS_KEY", default=None)
+    AWS_MODEL_BUCKET: Optional[str] = config("AWS_MODEL_BUCKET", default=None)
 
 
 class DatabaseSettings(BaseSettings):

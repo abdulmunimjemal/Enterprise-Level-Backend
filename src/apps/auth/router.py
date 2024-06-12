@@ -1,13 +1,10 @@
 from typing import Annotated, Dict
-from datetime import datetime, timezone
 from sqlmodel.ext.asyncio.session import AsyncSession
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 
 from fastapi.security import OAuth2PasswordRequestForm
-from server.dependencies import oauth2_scheme
 
-from core.config import get_settings
 from db.session import get_async_db
 from server.controllers.auth.auth_controller import AuthController, get_current_user
 

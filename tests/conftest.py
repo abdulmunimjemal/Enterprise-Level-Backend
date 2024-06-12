@@ -18,7 +18,7 @@ from src.core.config import Settings, get_settings
 from src.core.models import Base
 from src.db.session import get_async_db
 
-from .utils import user
+from .utils import user, aimodel
 
 # test_async_engine = create_async_engine("sqlite+aiosqlite://", poolclass=StaticPool, echo=False)
 test_async_engine = create_async_engine(

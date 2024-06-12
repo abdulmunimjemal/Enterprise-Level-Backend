@@ -6,6 +6,7 @@ from starlette.testclient import TestClient
 from passlib.context import CryptContext
 
 from db.models.user import User
+from db.models.ai_models import AiModel
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -26,3 +27,17 @@ async def user(session: AsyncSession) -> User:
     user = await session.exec(select(User).where(User.email == "ari@mood-me.com"))
     user = user.first()
     return user
+
+@pytest.fixture(scope="function")
+async def aimodel(session: AsyncSession) -> AiModel:
+    session.add(AiModel(
+        name="test",
+        description="test",
+        url_or_path="http://test.com/test",
+        version="0.0.1"
+    ))
+    await session.commit()
+    query = select(AiModel).where(AiModel.name == "test")
+    res = await session.exec(query)
+    return res.first()
+
