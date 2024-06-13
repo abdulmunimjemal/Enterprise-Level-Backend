@@ -44,7 +44,14 @@ COPY --from=certmaster /app/certs ./certs
 COPY .env .
 COPY . .
 COPY alembic.ini ./app/alembic.ini
+# I can't stand this next part... we'll have to figure it out
+
+RUN python -m venv /app/.venv \
+    && . /app/.venv/bin/activate \
+    && python3 -m pip install poetry \
+    && poetry install
 
 # RUN ${VIRTUAL_ENV}/bin/poetry run pybe generate-privkey
 
-CMD ["poetry", "run", "pybe", "src.main:app", "--host", "0.0.0.0", "--port", "80"]
+# fastapi run src/main.py --port 80
+CMD ["fastapi", "run", "src/main.py", "--port", "80", "--host", "0.0.0.0"]
