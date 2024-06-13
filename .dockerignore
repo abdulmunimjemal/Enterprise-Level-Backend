@@ -1,0 +1,15 @@
+__pycache__/
+!.env
+.env.*.testmondata*
+.testmondata
+.testmondata-*
+pybe/logs
+certs/*.DS_Store
+**/.DS_Store
+certs/
+pybe/logs/
+.pytest_cache
+certs/
+.venv
+.devcontainer
+deploy

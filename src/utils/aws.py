@@ -1,12 +1,10 @@
 import boto3
 from botocore.config import Config
 
-from core.logger import logger
+from core.logger import logging
 from core.config import get_settings
 
 settings = get_settings()
-
-logger = logger.get_logger()
 
 config = Config(
     region_name=settings.AWS_REGION,

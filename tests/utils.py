@@ -34,7 +34,8 @@ async def aimodel(session: AsyncSession) -> AiModel:
         name="test",
         description="test",
         url_or_path="http://test.com/test",
-        version="0.0.1"
+        version="0.0.1",
+        sha256="TODO"
     ))
     await session.commit()
     query = select(AiModel).where(AiModel.name == "test")

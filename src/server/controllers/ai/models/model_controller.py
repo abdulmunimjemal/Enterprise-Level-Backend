@@ -37,7 +37,7 @@ class ModelController:
         if not is_valid_path_or_url(create_model.url_or_path):
             raise Exception("Invalid path or url")
         
-        model = AiModel(**create_model.model_dump())
+        model = AiModel(**create_model.model_dump(), sha256="TODO")
         db.add(model)
         await db.commit()
         return ModelResponse(**model.model_dump())
