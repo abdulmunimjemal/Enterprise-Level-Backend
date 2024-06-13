@@ -65,6 +65,19 @@ def generate_privkey(_ctx, path: str, size: int):
     generate_and_save_rsa_private_key(path, size)
     click.echo(f"Private key generated at {path}")
 
+@cli.command
+@click.pass_context
+@click.option("--profile", "-p", help="AWS Profile")
+def deploy(_ctx, profile: str):
+    """
+    Deploy the application to AWS
+    """
+    import subprocess
+    click.echo("Deploying the application to AWS")
+    p = subprocess.Popen(["cdk", "deploy", "./deploy", "--profile", profile], cwd="deploy")
+    p.wait
+    
+
 
 if __name__ == "__main__":
     cli()

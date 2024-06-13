@@ -959,3 +959,5 @@ DROP TABLE users
 2024-06-13 07:22:54,339 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
 2024-06-13 07:23:40,436 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
 2024-06-13 07:23:43,764 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-13 09:18:15,214 - app - INFO - API Shutdown
+2024-06-13 09:18:51,037 - app - INFO - API Shutdown

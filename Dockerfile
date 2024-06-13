@@ -1,4 +1,4 @@
-FROM python:3.11-buster as builder
+FROM --platform=linux/amd64 python:3.11-buster as builder
 
 RUN pip install poetry
 
@@ -19,7 +19,7 @@ RUN python -m venv /app/.venv \
 
 WORKDIR /app
 
-FROM python:3.11-slim-buster as certmaster
+FROM --platform=linux/amd64 python:3.11-slim-buster as certmaster
 
 WORKDIR /app
 COPY --from=builder /app/.venv /app/.venv
@@ -29,7 +29,7 @@ RUN pip install poetry && poetry install && poetry run pybe generate-privkey
 
 
 # The runtime image, used to just run the code provided its virtual environment
-FROM python:3.11-slim-buster as runtime
+FROM --platform=linux/amd64 python:3.11-slim-buster as runtime
 
 RUN apt-get update -yq && apt-get install -yq libpq-dev make
 

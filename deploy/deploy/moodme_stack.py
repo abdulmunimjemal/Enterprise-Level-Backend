@@ -14,6 +14,7 @@ from aws_cdk import (
 )
 from aws_cdk import CfnOutput, Duration
 from .app import __version__
+from .pipeline_stack import PipelineStack
 from .utils import get_from_config_environ_or_default
 
 class MoodMeStack(Stack):
@@ -32,7 +33,7 @@ class MoodMeStack(Stack):
         namespace = get_from_config_environ_or_default('namespace', 'moodme', **kwargs)
         hostedZoneName = get_from_config_environ_or_default('hostedZoneName', 'moodme.ai', **kwargs)
         domainName = get_from_config_environ_or_default('domainName', 'moodme.ai', **kwargs)
-        applicationPort = get_from_config_environ_or_default('applicationPort', 8000, **kwargs)
+        applicationPort = get_from_config_environ_or_default('applicationPort', 80, **kwargs)
         certificateARN = get_from_config_environ_or_default('certificateARN', '', **kwargs)
 
         # Get VPC
@@ -142,7 +143,7 @@ class MoodMeStack(Stack):
         )
 
         targetGroupHttp.configure_health_check(
-            path="/status",
+            path="/health",
             protocol=elb.Protocol.HTTP,
         )
 
@@ -169,5 +170,7 @@ class MoodMeStack(Stack):
         )
 
         CfnOutput(self, "Load balancer ALB DNS name", value=alb.load_balancer_dns_name)
+
+        PipelineStack(self, "PipelineStack", **kwargs)
 
 

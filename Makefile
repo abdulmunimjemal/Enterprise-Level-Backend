@@ -1,5 +1,6 @@
 APP_VERSION?=DEV-SNAPSHOT
 APP_NAME?=mmbackend
+PORT?=80
 
 IMAGE_ID?=$(APP_NAME):$(APP_VERSION)
 IMAGE_SAVE_LOCATION?=./build/images
@@ -28,7 +29,7 @@ dev-app: build-app
 
 run-app: build-app
 	@echo "Running application"
-	@poetry run pybe serve --host 0.0.0.0 --port 80
+	@poetry run pybe serve --host 0.0.0.0 --port ${PORT}
 
 migration-new: install-dependencies
 	@echo "Generating new migration"
