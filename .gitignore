@@ -10,4 +10,5 @@ certs/
 pybe/logs/
 .pytest_cache
 certs/
-.venv
+.venvsrc/logs
+src/logs

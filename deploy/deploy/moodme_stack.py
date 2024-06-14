@@ -238,9 +238,9 @@ class MoodMeStack(Stack):
         )
 
         hostedZoneARecord = route53.ARecord(self, "HostedZoneARecord", 
+            comment="A record for the backend",
             record_name=hostedZoneName,
             zone=hostedZone,
-            comment="A record for the backend",
             target=route53.RecordTarget.from_alias(route53_targets.LoadBalancerTarget(alb)),
             ttl=Duration.seconds(300)
         )

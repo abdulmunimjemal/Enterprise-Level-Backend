@@ -39,15 +39,15 @@ class DatabaseStack(Construct):
             ),
         )
 
-        subnet_group = rds.SubnetGroup(self, "MySubnetGroup",
-            description="description",
-            vpc=vpc,
-            removal_policy=RemovalPolicy.DESTROY,
-            subnet_group_name="subnetGroupName",
-            vpc_subnets=ec2.SubnetSelection(
-                subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS
-            )
-        )
+        # subnet_group = rds.SubnetGroup(self, "MySubnetGroup",
+        #     description="description",
+        #     vpc=vpc,
+        #     removal_policy=RemovalPolicy.DESTROY,
+        #     subnet_group_name="subnetGroupName",
+        #     vpc_subnets=ec2.SubnetSelection(
+        #         subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS
+        #     )
+        # )
 
         db = rds.DatabaseInstance(
             self,
@@ -69,7 +69,6 @@ class DatabaseStack(Construct):
             performance_insight_retention=rds.PerformanceInsightRetention.DEFAULT,
             monitoring_interval=Duration.seconds(60),
             publicly_accessible=False,
-            subnet_group=subnet_group,
             backup_retention=Duration.days(7),
         )
 
