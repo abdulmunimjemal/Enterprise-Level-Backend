@@ -4,5 +4,8 @@ minCapacity: 1
 maxCapacity: 20
 account: "971670226036"
 projectName: MoodMe
-description: This stack deploys a Fargate managed ELB environment for creating localized detections from a YOLOv5 model using the FastAPI framework with a general underwater megadetector
-certificateARN: arn:aws:acm:us-east-1:971670226036:certificate/cfaae7f4-c276-411b-aeea-6b2cde5e7dc9
+description: Moodme stack
+certificateARN: arn:aws:acm:us-east-1:971670226036:certificate/075bba03-c46b-4755-ac1f-dfac7898fe78
+domainName: backend.mood-me.com
+hostedZoneId: "Z08998253M9SK1N1JI6OB"
+hostedZoneName: mood-me.com

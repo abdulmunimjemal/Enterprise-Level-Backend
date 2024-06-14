@@ -21,13 +21,12 @@ deletion_date = (dt.datetime.utcnow() + dt.timedelta(days=90)).strftime('%Y%m%dT
 tag_dict = {'moodme:deletion-date': deletion_date}
 
 env = Environment(account=account, region=region)
-print(env)
 app = App()
 
 MoodMeStack(app, "DeployStack",
     env=env,
     tags=tag_dict,
-    description=description
-    )
+    description=description,
+)
 
 app.synth()

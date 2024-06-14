@@ -961,3 +961,21 @@ DROP TABLE users
 2024-06-13 07:23:43,764 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
 2024-06-13 09:18:15,214 - app - INFO - API Shutdown
 2024-06-13 09:18:51,037 - app - INFO - API Shutdown
+2024-06-13 10:40:12,572 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-13 10:40:15,359 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2024-06-13 20:35:37,168 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-13 20:43:08,074 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-13 20:47:18,130 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-13 20:47:32,546 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-13 20:47:52,436 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-13 20:48:16,930 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-13 20:48:47,226 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-13 20:50:04,400 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-13 23:55:51,044 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-14 00:12:32,731 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-14 00:13:40,249 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-14 00:13:50,843 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-14 02:45:45,941 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-14 02:45:47,048 - root - ERROR - Error uploading file /tmp/test.txt: [Errno 2] No such file or directory: 'moodme-test-bucket'
+2024-06-14 02:47:26,302 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2024-06-14 02:48:51,728 - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials

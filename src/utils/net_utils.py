@@ -1,10 +1,11 @@
 import os
+from typing import Optional
 import urllib.request, urllib.parse, urllib.error
 import shutil
-from core.common import get_settings
+from core.config import get_settings
 from .aws import s3
 from fastapi import File, UploadFile
-from core.logger import logger
+from core.logger import logging
 
 
 settings = get_settings()
@@ -17,19 +18,16 @@ async def download_file(url: str, path: str):
     else:
         shutil.copy(url, path)
 
-async def download_s3_file(url: str, path: str):
-    # s3.download_file(storage_bucket, url, path)
-    pass
+async def download_s3_file(url: str, path: str, bucket_name: str = settings.AWS_MODEL_BUCKET):
+    s3.download_file(bucket_name, url, path)
 
-async def upload_file(file: UploadFile = File(...), bucket_name: str = settings.AWS_MODEL_BUCKET):
-    # s3.upload_file(storage_bucket, url, path)
-    temp_file = os.path.join("/tmp", file.filename)
-    with open(temp_file, "wb") as out_file:
-        out_file.write(await file.read())
+async def upload_file(file_name: str, bucket_name: str = settings.AWS_MODEL_BUCKET, object_name: Optional[str] = None):
+    if object_name is None:
+        object_name = os.path.basename(file_name)
     try:
-        filename = f"{bucket_name}/{file.filename}"
-        s3.fput_object(filename, temp_file)
+        print(f"Uploading file {file_name} to bucket {bucket_name} as {object_name}")
+        s3.upload_file(file_name, bucket_name, object_name)
     except Exception as e:
-        logger.error(f"Error uploading file {file.filename}: {e}")
+        logging.error(f"Error uploading file {file_name}: {e}")
         return False
     return True
