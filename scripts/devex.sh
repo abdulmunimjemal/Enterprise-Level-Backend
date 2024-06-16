@@ -10,6 +10,8 @@ FORCE_REBUILD_IMAGE=false
 DOCKER_DIR=".devcontainer"
 RUN_PRIVILEGED=false
 VERBOSE="false"
+PORTS=("8000:8000")
+ADDITIONAL_ARGS=""
 declare -a MOUNTS=("$(pwd):/workspace")
 
 # docker_service_address=$(docker network inspect kind -f "{{(index .IPAM.Config 1).Subnet}}" | cut -d '.' -f1,2,3)
@@ -78,20 +80,32 @@ start_container() {
     fi
 }
 
-exec_instance() {
+stop_container() {
     local docker_instance=$(docker_instance)
     if [[ -z "$docker_instance" ]]; then
         printf "${Colors[BRed]}No container found${Colors[Color_Off]}"
         exit 1
+    fi
+    docker stop ${docker_instance}
+}
+
+exec_instance() {
+    local docker_instance=$(docker_instance)
+    if [[ -z "$docker_instance" ]]; then
+        printf "${Colors[BRed]}No container found${Colors[Color_Off]}"
+        printf "${Colors[BGreen]}Starting container${Colors[Color_Off]}"
+        start_container
+        # exit 1
     fi
     docker exec -it ${docker_instance} /usr/bin/zsh
 }
 
 parse_opts() {
     local opt
-    while getopts "n:v" opt; do
+    while getopts "n:p:v" opt; do
         case ${opt} in
             n ) CLUSTER_NAME=$OPTARG ;;
+            p ) PORTS+=("$OPTARG") ;;
             v ) VERBOSE="true" ;;
             \? ) echo "Invalid option: $OPTARG" 1>&2; exit 1 ;;
         esac
@@ -102,11 +116,13 @@ help() {
     echo -e "${Colors[BGreen]}Usage: $(basename "$0") [options] <command>${Colors[Color_Off]}
 Options:
   -n  Name of the docker container (default: $CONTAINER_NAME)
+  -p  Ports to map (default: $PORTS)
   -v  Verbose mode
 
 Commands:
   ${Colors[Green]}build${Colors[Color_Off]}             Build the Docker image
   ${Colors[Green]}start${Colors[Color_Off]}             Start the Docker container
+  ${Colors[Green]}stop${Colors[Color_Off]}              Stop the Docker container
   ${Colors[Green]}exec${Colors[Color_Off]}              Exec into the container
 "
     exit 1
@@ -121,6 +137,7 @@ main() {
     case "$1" in
         build) build_image ;;
         start) start_container ;;
+        stop) stop_container ;;
         exec) exec_instance ;;
         *) help ;;
     esac

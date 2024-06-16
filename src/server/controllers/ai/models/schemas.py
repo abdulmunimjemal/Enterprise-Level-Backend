@@ -1,4 +1,5 @@
-from typing import Optional, Dict
+from fastapi import UploadFile, File
+from typing import Optional, Dict, Annotated
 from pydantic import BaseModel, ConfigDict, Field
 from uuid import UUID
 

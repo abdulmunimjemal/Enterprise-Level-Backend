@@ -12,3 +12,4 @@ pybe/logs/
 certs/
 .venvsrc/logs
 src/logs
+config.yml

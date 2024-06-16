@@ -25,7 +25,7 @@ watch-test-app: install-dependencies
 
 dev-app: build-app
 	@echo "Running application"
-	@poetry run pybe serve --host localhost --port 8000 --reload
+	@poetry run pybe serve --host 0.0.0.0 --port 8000 --reload
 
 run-app: build-app
 	@echo "Running application"

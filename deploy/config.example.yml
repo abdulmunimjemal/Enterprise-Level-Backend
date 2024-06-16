@@ -2,13 +2,12 @@ environment: Production
 region: us-east-1
 minCapacity: 1
 maxCapacity: 20
-account: "971670226036"
+account: "ACCOUNT NUMBER"
 projectName: MoodMe
 description: Moodme stack
 certificateARN: arn:aws:acm:us-east-1:971670226036:certificate/075bba03-c46b-4755-ac1f-dfac7898fe78
 domainName: backend.mood-me.com
 hostedZoneId: "Z08998253M9SK1N1JI6OB"
 hostedZoneName: mood-me.com
-githubTokenArn: arn:aws:secretsmanager:us-east-1:971670226036:secret:mm-build-github-token-80AH1K
-githubUser: MoodMeAI
-githubRepo: pybe
+githubTokenArn: TOKEN ARN
+

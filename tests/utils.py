@@ -1,9 +1,13 @@
+from typing import Tuple
+from io import BytesIO
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import select
 import pytest
 from httpx import Response
 from starlette.testclient import TestClient
 from passlib.context import CryptContext
+from os import path
+from fastapi import UploadFile, File
 
 from db.models.user import User
 from db.models.ai_models import AiModel
@@ -28,15 +32,30 @@ async def user(session: AsyncSession) -> User:
     user = user.first()
     return user
 
+@pytest.fixture(scope='function')
+def fixture_path() -> str:
+    return path.join(path.dirname(__file__), "fixtures")
+
+@pytest.fixture(scope='function')
+async def model_file_bytes(fixture_path: str) -> BytesIO:
+    with open(path.join(fixture_path, "gender-test.zip"), "rb") as f:
+        data = f.read()
+    return BytesIO(data)
+
+@pytest.fixture(scope='function')
+def model_file(model_file_bytes: BytesIO) -> File:
+    return File(model_file_bytes, filename="gender-test.zip", media_type="application/zip")
+
+
 @pytest.fixture(scope="function")
-async def aimodel(session: AsyncSession) -> AiModel:
+async def aimodel(session: AsyncSession, model_file: File) -> AiModel:
     session.add(AiModel(
         name="test",
         description="test",
         url_or_path="http://test.com/test",
         version="0.0.1",
-        sha256="TODO"
-    ))
+        sha256="TODO",
+    ), model_file)
     await session.commit()
     query = select(AiModel).where(AiModel.name == "test")
     res = await session.exec(query)
