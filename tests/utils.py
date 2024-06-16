@@ -14,6 +14,7 @@ from db.models.ai_models import AiModel
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+
 def make_request(client: TestClient, endpoint: str) -> Response:
     return client.get(endpoint)
 
@@ -32,15 +33,18 @@ async def user(session: AsyncSession) -> User:
     user = user.first()
     return user
 
+
 @pytest.fixture(scope='function')
 def fixture_path() -> str:
     return path.join(path.dirname(__file__), "fixtures")
+
 
 @pytest.fixture(scope='function')
 async def model_file_bytes(fixture_path: str) -> BytesIO:
     with open(path.join(fixture_path, "gender-test.zip"), "rb") as f:
         data = f.read()
     return BytesIO(data)
+
 
 @pytest.fixture(scope='function')
 def model_file(model_file_bytes: BytesIO) -> File:
@@ -55,9 +59,8 @@ async def aimodel(session: AsyncSession, model_file: File) -> AiModel:
         url_or_path="http://test.com/test",
         version="0.0.1",
         sha256="TODO",
-    ), model_file)
+    ))
     await session.commit()
     query = select(AiModel).where(AiModel.name == "test")
     res = await session.exec(query)
     return res.first()
-

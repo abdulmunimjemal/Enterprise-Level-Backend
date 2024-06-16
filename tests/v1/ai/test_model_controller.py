@@ -17,9 +17,11 @@ from src.server.controllers.ai.models.schemas import (
     CreateModel,
 )
 
+
 @pytest.mark.asyncio
 async def test_create_model(session: AsyncSession, model_file: UploadFile):
-    create_model: CreateModel = CreateModel(name="test", description="test", url_or_path="http://test.com/test")
+    create_model: CreateModel = CreateModel(
+        name="test", description="test", url_or_path="http://test.com/test")
     print(f"model_file: {model_file}")
 
     model_response = await ModelController.create_model(session, create_model, model_file)
@@ -37,12 +39,14 @@ async def test_create_model(session: AsyncSession, model_file: UploadFile):
     assert model.description == "test"
     assert model.url_or_path == "http://test.com/test"
 
+
 @pytest.mark.asyncio
 async def test_duplicate_model_with_same_version(session: AsyncSession, aimodel: AiModel, model_file: Tuple[str, bytes]):
-    create_model: CreateModel = CreateModel(name="test", description="test", url_or_path="test", version="0.0.1")
+    create_model: CreateModel = CreateModel(
+        name="test", description="test", url_or_path="test", version="0.0.1")
     with pytest.raises(Exception):
         await ModelController.create_model(session, create_model, model_file)
-    
+
     with pytest.raises(Exception):
         await ModelController.create_model(session, CreateModel(
             name="test",
@@ -51,15 +55,18 @@ async def test_duplicate_model_with_same_version(session: AsyncSession, aimodel:
             version="0.0.1"
         ), {"upload_file": model_file})
 
+
 @pytest.mark.asyncio
-async def test_model_with_invalid_type_fails(session: AsyncSession, aimodel: AiModel, model_file: UploadFile):
-    create_model: CreateModel = CreateModel(name="test", description="test", url_or_path="test", version="0.0.1")
+async def test_model_with_invalid_type_fails(session: AsyncSession, model_file: File):
+    create_model: CreateModel = CreateModel(
+        name="test", description="test", url_or_path="test", version="0.0.1")
     with pytest.raises(Exception):
         await ModelController.create_model(session, create_model, model_file)
-     
+
+
 @pytest.mark.asyncio
-async def test_get_models(session: AsyncSession, aimodel: AiModel, user: User):
-    models = await ModelController.get_models(session, user)
+async def test_get_models(session: AsyncSession, model_file: File, aimodel: AiModel):
+    models = await ModelController.get_models(session)
     assert len(models) == 1
     assert models[0].name == "test"
     await ModelController.create_model(session, CreateModel(
@@ -67,10 +74,11 @@ async def test_get_models(session: AsyncSession, aimodel: AiModel, user: User):
         description="test2",
         url_or_path="http://test2.com/test2",
         version="0.0.1"
-    ))
-    models = await ModelController.get_models(session, user)
+    ), model_file)
+    models = await ModelController.get_models(session)
     assert len(models) == 2
     assert models[1].name == "test2"
+
 
 @pytest.mark.asyncio
 async def test_delete_model(session: AsyncSession, aimodel: AiModel):
@@ -80,4 +88,3 @@ async def test_delete_model(session: AsyncSession, aimodel: AiModel):
     resp = await session.exec(query)
     model = resp.first()
     assert model is None
-

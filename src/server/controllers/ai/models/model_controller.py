@@ -11,9 +11,10 @@ from .schemas import (
     CreateModel
 )
 
+
 class ModelController:
     @staticmethod
-    async def get_models(db: AsyncSession, current_user: ModelResponse) -> List[ModelResponse]:
+    async def get_models(db: AsyncSession) -> List[ModelResponse]:
         query = select(AiModel)
         models = await db.exec(query)
         return [ModelResponse(**model.model_dump()) for model in models]
@@ -40,7 +41,7 @@ class ModelController:
 
         if not is_valid_path_or_url(create_model.url_or_path):
             raise Exception("Invalid path or url")
-        
+
         # TODO: Hash the file
         try:
             # Upload model first
@@ -50,6 +51,7 @@ class ModelController:
             await db.commit()
             return ModelResponse(**model.model_dump())
         except Exception as e:
+            print(f"Error creating model: {e}")
             raise Exception("Failed to create model") from e
 
     @staticmethod
@@ -63,4 +65,3 @@ class ModelController:
         await db.delete(model)
         await db.commit()
         return {"message": "Model deleted"}
-
