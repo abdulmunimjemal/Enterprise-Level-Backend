@@ -5,7 +5,7 @@ on:
     branches: [main]
 env:
   AWS_ECS_REPO: 971670226036.dkr.ecr.us-east-1.amazonaws.com/moodme-repo:latest
-  MIGRATION_LAMBDA_NAME: moodme-migration-lambda
+  MIGRATION_LAMBDA_NAME: DeployStack-MigrationLambdaDC97547E-DSc8WuDGVXY1
 
 jobs:
   build-container-and-push-to-registry:
