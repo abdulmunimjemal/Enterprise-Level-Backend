@@ -24,20 +24,22 @@ class EcrStack(Construct):
     ):
         super().__init__(scope, id)
 
-        dbUser = get_from_config_environ_or_default('dbUser', 'moodme', **kwargs)
-        namespace = get_from_config_environ_or_default('namespace', 'moodme', **kwargs)
-        database_name = get_from_config_environ_or_default('database_name', 'moodme', **kwargs)
         repository_name = get_from_config_environ_or_default('repository_name', 'moodme-repo', **kwargs)
 
-        repo = ecr.Repository(
+        repo = ecr.Repository.from_repository_name(
             self,
             "repo",
             repository_name=repository_name,
-            image_scan_on_push=True,
-            lifecycle_rules=[
-                ecr.LifecycleRule(max_image_count=10),
-            ],
         )
+        # repo = ecr.Repository(
+        #     self,
+        #     "repo",
+        #     repository_name=repository_name,
+        #     image_scan_on_push=True,
+        #     lifecycle_rules=[
+        #         ecr.LifecycleRule(max_image_count=10),
+        #     ],
+        # )
         self.ecr = repo
 
         CfnOutput(self, "EcrRepository", value=repo.repository_uri)

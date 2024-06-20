@@ -7,7 +7,7 @@ ACCOUNT_NUMBER?=$(shell aws sts get-caller-identity --profile ${AWS_PROFILE} --q
 GIT_SHA_FETCH := $(shell git rev-parse HEAD | cut -c 1-8)
 
 PUBLISH_REPO=$(APP_NAME)-repo
-IMAGE_ID?=$(APP_NAME):$(APP_VERSION)
+IMAGE_ID?=$(APP_NAME):$(GIT_SHA_FETCH)
 IMAGE_SAVE_LOCATION?=./build/images
 OPENAPI_SAVE_LOCATION?=./build/openapi
 
@@ -98,7 +98,11 @@ docker-login:
 
 docker-push:
 	@echo "Tagging docker image"
-	@docker tag ${IMAGE_ID} ${PUBLISH_REPO}:${GIT_SHA_FETCH}
-	@echo "Pushing docker image"
-	@docker push ${PUBLISH_REPO}:${GIT_SHA_FETCH}
+	@docker tag ${IMAGE_ID} ${ACCOUNT_NUMBER}.dkr.ecr.us-east-1.amazonaws.com/${PUBLISH_REPO}:${GIT_SHA_FETCH}
+	@echo "Push docker image with tag ${GIT_SHA_FETCH}"
+	@docker push ${ACCOUNT_NUMBER}.dkr.ecr.us-east-1.amazonaws.com/${PUBLISH_REPO}:${GIT_SHA_FETCH}
+
+deploy:
+	@echo "Deploying to ECS"
+	@cd deploy && cdk deploy --profile ${AWS_PROFILE}
 

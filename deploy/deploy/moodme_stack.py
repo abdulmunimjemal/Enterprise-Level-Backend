@@ -14,7 +14,7 @@ from aws_cdk import (
     aws_route53_targets as route53_targets,
     aws_rds as rds,
     aws_elasticloadbalancingv2 as elb,
-    aws_secretsmanager as secretsmanager
+    aws_secretsmanager as secrets_manager,
 )
 from aws_cdk import CfnOutput, Duration
 from .app import __version__
@@ -55,13 +55,16 @@ class MoodMeStack(Stack):
             'applicationPort', 80, **kwargs)
         certificateARN = get_from_config_environ_or_default(
             'certificateARN', '', **kwargs)
-        dbUser = get_from_config_environ_or_default(
-            'dbUser', 'moodme', **kwargs)
-        dbPassword = get_from_config_environ_or_default(
-            'dbPassword', 'moodme', **kwargs)
-        dbDatabase = get_from_config_environ_or_default(
-            'dbDatabase', 'moodme', **kwargs)
+        
+        aws_secret = secrets_manager.Secret.from_secret_name_v2(self, "AccessSecret", secret_name="/moodme/aws/keys")
+        db_secrets = secrets_manager.Secret.from_secret_name_v2(self, "DBSecretID", secret_name="/moodme/database/creds")
 
+        dbUser = db_secrets.get_secret_value(self, "username")
+        dbPassword = db_secrets.get_secret_value(self, "password")
+        dbDatabase = db_secrets.get_secret_value(self, "dbname")
+        dbHost = db_secrets.get_secret_value(self, "host")
+        dbPort = db_secrets.get_secret_value(self, "port")
+        
         # Get VPC
         # vpcId = ssm.StringParameter.value_from_lookup(self, f"/{namespace}/vpc/id")
         # vpc = ec2.Vpc.from_lookup(self, "VPC", vpc_name="moodme-vpc")
@@ -190,8 +193,8 @@ class MoodMeStack(Stack):
         taskDef = ecs.TaskDefinition(self, "TaskDefinition",
                                      family=f"{namespace}-task",
                                      compatibility=ecs.Compatibility.EC2_AND_FARGATE,
-                                     cpu="256",
-                                     memory_mib="512",
+                                     cpu="512",
+                                     memory_mib="1024",
                                      network_mode=ecs.NetworkMode.AWS_VPC,
                                      task_role=taskRole
                                      )
@@ -202,8 +205,8 @@ class MoodMeStack(Stack):
                                               tag="latest"
                                           ),
                                         #   image=ecs.ContainerImage.from_asset(path.join(path.dirname(__file__), "../../")),
-                                          memory_limit_mib=512,
-                                          memory_reservation_mib=256,
+                                          memory_limit_mib=1024,
+                                          memory_reservation_mib=512,
                                           environment=dict(
                                               # "DATABASE_URL": ssm.StringParameter.value_from_lookup(self, f"/{namespace}/database/url"),
                                               # "SECRET_KEY": ssm.StringParameter.value_from_lookup(self, f"/{namespace}/secret/key"),
@@ -211,9 +214,12 @@ class MoodMeStack(Stack):
                                               POSTGRES_USER=dbUser,
                                               POSTGRES_PASSWORD=dbPassword,
                                               POSTGRES_DB=dbDatabase,
-                                              POSTGRES_SERVER=db.db_instance_endpoint_address,
-                                              POSTGRES_PORT="3306",
-                                              POSTGRES_URL=f"postgresql+asyncpg://{dbUser}:{dbPassword}@{db.db_instance_endpoint_address}:3306/{dbDatabase}",
+                                              POSTGRES_SERVER=dbHost,
+                                              POSTGRES_PORT=dbPort,
+                                              POSTGRES_URL=f"postgresql+asyncpg://{dbUser}:{dbPassword}@{dbHost}:{dbPort}/{dbDatabase}",
+                                              AWS_ACCESS_KEY_ID=aws_secret.get_secret_value(self, "AWS_ACCESS_KEY_ID"),
+                                              AWS_SECRET_ACCESS_KEY=aws_secret.get_secret_value(self, "AWS_SECRET_ACCESS_KEY"),
+                                              AWS_REGION=aws_secret.get_secret_value(self, "AWS_REGION"),
                                           ),
                                           port_mappings=[ecs.PortMapping(
                                               container_port=applicationPort)],

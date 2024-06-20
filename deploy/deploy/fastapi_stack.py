@@ -153,8 +153,10 @@ class FastAPIStack(Stack):
             desired_count=1,
             task_image_options=image_options,
             open_listener=False,
+            public_load_balancer=True,
             # Since we deploy using docker
             circuit_breaker={
+                'enable': True,
                 'rollback': False
             }
         )
