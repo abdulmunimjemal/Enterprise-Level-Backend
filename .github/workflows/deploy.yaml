@@ -29,4 +29,26 @@ jobs:
           ECR_REPOSITORY: ${{ env.AWS_ECS_REPO }}
           IMAGE_TAG: latest
         run: docker push ${{ env.AWS_ECS_REPO }}
-  
+  update-migration-lambda-and-run:
+    name: "Update migration lambda and run migrations"
+    runs-on: ubuntu-latest
+    needs: build-container-and-push-to-registry
+    steps:
+      - name: "Configure AWS Credentials"
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+      - uses: actions/checkout@v2
+      - name: "Update migration lambda code"
+        run: |
+          aws lambda update-function-code --function-name ${{ env.MIGRATION_LAMBDA_NAME }} --image-uri ${{ env.AWS_ECS_REPO }} --publish
+      - name: "Wait 30 seconds"
+        run: |
+          sleep 30
+      - name: "Run migrations"
+        run: |
+          aws lambda invoke --function-name ${{ env.MIGRATION_LAMBDA_NAME }} --cli-binary-format raw-in-base64-out --payload '["--config=/var/task/app/alembic.ini", "upgrade", "head"]' result.json
+      - name: "Display migrations result"
+        run: cat result.json

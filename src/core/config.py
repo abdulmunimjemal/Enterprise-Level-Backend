@@ -55,9 +55,7 @@ class PostgresSettings(DatabaseSettings):
     POSTGRES_SERVER: str = config("POSTGRES_SERVER", default="db")
     POSTGRES_PORT: int = config("POSTGRES_PORT", default=5432)
     POSTGRES_DB: str = config("POSTGRES_DB", default="postgres")
-    POSTGRES_ASYNC_URI: PostgresDsn | str = (
-        "postgresql+asyncpg://postgres:postgres@db:5432/pybe"
-    )
+    POSTGRES_ASYNC_URI: PostgresDsn | str = config("POSTGRES_ASYNC_URI",default="postgresql+asyncpg://postgres:postgres@db:5432/pybe")
 
     @field_validator("POSTGRES_ASYNC_URI", mode="after")
     def assemble_db_connection(cls, v: str | None, info: ValidationInfo) -> Any:

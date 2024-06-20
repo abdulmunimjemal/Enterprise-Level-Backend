@@ -20,6 +20,7 @@ custom_alembic_version_table_name = "_alembic_version"
 config = context.config
 
 config.set_main_option(name="sqlalchemy.url", value=f"{settings.POSTGRES_ASYNC_URI}")
+print(f"sqlalchemy.url: {config.get_main_option('sqlalchemy.url')}")
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)

@@ -13,6 +13,7 @@ from aws_cdk import (
     aws_route53 as route53,
     aws_route53_targets as route53_targets,
     aws_rds as rds,
+    aws_lambda as awslambda,
     aws_elasticloadbalancingv2 as elb,
     aws_secretsmanager as secrets_manager,
 )
@@ -122,11 +123,17 @@ class MoodMeStack(Stack):
 
         albSecurityGroup.add_ingress_rule(
             ec2.Peer.any_ipv4(),
-            ec2.Port.tcp(443),
-            "Allow HTTPS traffic"
+            ec2.Port.tcp(80),
+            "Allow HTTP traffic"
         )
 
         alb.connections.add_security_group(albSecurityGroup)
+        alb.add_redirect(
+            source_port=80,
+            source_protocol=elb.ApplicationProtocol.HTTP,
+            target_port=443,
+            target_protocol=elb.ApplicationProtocol.HTTPS
+        )
 
         cluster = ecs.Cluster(self, "MM-Cluster",
                               cluster_name=f"{namespace}-cluster",
@@ -145,29 +152,44 @@ class MoodMeStack(Stack):
         ecrStack = EcrStack(self, "EcrStack", vpc=vpc, **kwargs)
         repo = ecrStack.get_repo()
 
-        # ecrStack = PipelineStack(self, "EcrStack", **kwargs)
+        environment = dict(
+            # "DATABASE_URL": ssm.StringParameter.value_from_lookup(self, f"/{namespace}/database/url"),
+            # "SECRET_KEY": ssm.StringParameter.value_from_lookup(self, f"/{namespace}/secret/key"),
+            AWS_MODEL_BUCKET=model_bucket.bucket_name,
+            POSTGRES_ASYNC_URI=f"postgresql+asyncpg://{dbUser}:{dbPassword}@{dbHost}:{dbPort}/{dbDatabase}",
+        )
+        secrets={
+            "POSTGRES_PASSWORD": dbPassword,
+            "POSTGRES_DB": dbDatabase,
+            "POSTGRES_SERVER": dbHost,
+            "POSTGRES_PORT": dbPort,
+            "POSTGRES_USER": dbUser,
+            "AWS_ACCESS_KEY_ID": aws_access_key_id,
+            "AWS_SECRET_ACCESS_KEY": aws_secret_access_key,
+            "AWS_REGION": aws_region
+        }
 
-        # secret_db_creds = secretsmanager.Secret(
-        #     self,
-        #     "DBCreds",
-        #     secret_name=f"/{namespace}/database/creds",
-        #     generate_secret_string={
-        #         "password_length": 32,
-        #         "password_characters": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-        #     }
-        # )
-
-        # db_creds = rds.Credentials.from_generated_secret(dbUser)
-        # db_cluster = rds.DatabaseCluster(self, 'MoodMeBackendRDS',
-        #     engine=rds.DatabaseClusterEngine.aurora_postgres(
-        #         version=rds.AuroraPostgresEngineVersion.VER_16_1,
-        #     ),
-        #     writer=rds.ClusterInstance.provisioned("writer",
-        #         instance_type=ec2.InstanceType.of(ec2.InstanceClass.R6G, ec2.InstanceSize.XLARGE4)
-        #     ),
-        #     credentials=db_creds,
-        #     vpc=vpc,
-        # )
+        # Create a migration
+        migrationLambdaCode = awslambda.Code.from_ecr_image(image=ecs.ContainerImage.from_ecr_repository(
+                                              repository=repo,
+                                              tag="latest"
+                                          ),
+                                          cmd=["alembic.config.main"],
+                                          )
+        migration_lambda = awslambda.Function(self, "MigrationLambda",
+                                              code=migrationLambdaCode,
+                                              handler=awslambda.Handler.FROM_IMAGE,
+                                              runtime=awslambda.Runtime.FROM_IMAGE,
+                                              timeout=Duration.seconds(600),
+                                              tracing=awslambda.Tracing.ACTIVE,
+                                              environment=environment,
+                                              secrets=secrets,
+                                              )
+        migration_lambda.connections.allow_to(
+            db,
+            ec2.Port.tcp(5432),
+            "Allow from RDS"
+        )
 
         taskRole = iam.Role(self, "ECS-TaskRole",
                             assumed_by=iam.ServicePrincipal(
@@ -212,22 +234,8 @@ class MoodMeStack(Stack):
                                         #   image=ecs.ContainerImage.from_asset(path.join(path.dirname(__file__), "../../")),
                                           memory_limit_mib=1024,
                                           memory_reservation_mib=512,
-                                          environment=dict(
-                                              # "DATABASE_URL": ssm.StringParameter.value_from_lookup(self, f"/{namespace}/database/url"),
-                                              # "SECRET_KEY": ssm.StringParameter.value_from_lookup(self, f"/{namespace}/secret/key"),
-                                              AWS_MODEL_BUCKET=model_bucket.bucket_name,
-                                              POSTGRES_URL=f"postgresql+asyncpg://{dbUser}:{dbPassword}@{dbHost}:{dbPort}/{dbDatabase}",
-                                          ),
-                                          secrets={
-                                                "POSTGRES_PASSWORD": dbPassword,
-                                                "POSTGRES_DB": dbDatabase,
-                                                "POSTGRES_SERVER": dbHost,
-                                                "POSTGRES_PORT": dbPort,
-                                                "POSTGRES_USER": dbUser,
-                                                "AWS_ACCESS_KEY_ID": aws_access_key_id,
-                                                "AWS_SECRET_ACCESS_KEY": aws_secret_access_key,
-                                                "AWS_REGION": aws_region
-                                          },
+                                          environment=environment,
+                                          secrets=secrets,
                                           port_mappings=[ecs.PortMapping(
                                               container_port=applicationPort)],
                                           logging=ecs.LogDriver.aws_logs(
