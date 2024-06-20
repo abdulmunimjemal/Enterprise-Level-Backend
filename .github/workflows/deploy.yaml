@@ -1,0 +1,32 @@
+name: Deploy development changes on push to main branch
+
+on:
+  push:
+    branches: [main]
+env:
+  AWS_ECS_REPO: 971670226036.dkr.ecr.us-east-1.amazonaws.com/moodme-repo:latest
+
+jobs:
+  build-container-and-push-to-registry:
+    name: "Build container and push to registry"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Build container image"
+        run: docker build -t ${{ env.AWS_ECS_REPO }} . -f Dockerfile.prod
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: "Push image to ECR"
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ env.AWS_ECS_REPO }}
+          IMAGE_TAG: latest
+        run: docker push ${{ env.AWS_ECS_REPO }}
+  

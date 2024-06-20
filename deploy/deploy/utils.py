@@ -21,3 +21,8 @@ def get_from_config_environ_or_default(key: str, default: str, **kwargs) -> str:
 
 def clean_name(branch: str):
     return re.sub("/", "-", branch)[0:30]
+
+
+def build_resource_id(id: str, suffix: str):
+    return f"{id}-{suffix}"
+

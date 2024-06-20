@@ -20,6 +20,7 @@ from aws_cdk import CfnOutput, Duration
 from .app import __version__
 from .pipeline_stack import PipelineStack
 from .database_stack import DatabaseStack
+from .ecr_stack import EcrStack
 from .utils import get_from_config_environ_or_default
 
 
@@ -56,6 +57,10 @@ class MoodMeStack(Stack):
             'certificateARN', '', **kwargs)
         dbUser = get_from_config_environ_or_default(
             'dbUser', 'moodme', **kwargs)
+        dbPassword = get_from_config_environ_or_default(
+            'dbPassword', 'moodme', **kwargs)
+        dbDatabase = get_from_config_environ_or_default(
+            'dbDatabase', 'moodme', **kwargs)
 
         # Get VPC
         # vpcId = ssm.StringParameter.value_from_lookup(self, f"/{namespace}/vpc/id")
@@ -129,6 +134,9 @@ class MoodMeStack(Stack):
         dbStack = DatabaseStack(self, "DatabaseStack", vpc=vpc, **kwargs)
         db = dbStack.get_db()
 
+        ecrStack = EcrStack(self, "EcrStack", vpc=vpc, **kwargs)
+        repo = ecrStack.get_repo()
+
         # ecrStack = PipelineStack(self, "EcrStack", **kwargs)
 
         # secret_db_creds = secretsmanager.Secret(
@@ -189,16 +197,24 @@ class MoodMeStack(Stack):
                                      )
 
         container = taskDef.add_container("MoodMeContainer",
-                                          image=ecs.ContainerImage.from_asset(
-                                              path.join(path.dirname(__file__), "../../")),
+                                          image=ecs.ContainerImage.from_ecr_repository(
+                                              repository=repo,
+                                              tag="latest"
+                                          ),
+                                        #   image=ecs.ContainerImage.from_asset(path.join(path.dirname(__file__), "../../")),
                                           memory_limit_mib=512,
                                           memory_reservation_mib=256,
-                                          environment={
+                                          environment=dict(
                                               # "DATABASE_URL": ssm.StringParameter.value_from_lookup(self, f"/{namespace}/database/url"),
                                               # "SECRET_KEY": ssm.StringParameter.value_from_lookup(self, f"/{namespace}/secret/key"),
-                                              "AWS_MODEL_BUCKET": model_bucket.bucket_name,
-                                              "POSTGRES_URL": db.db_instance_endpoint_address,
-                                          },
+                                              AWS_MODEL_BUCKET=model_bucket.bucket_name,
+                                              POSTGRES_USER=dbUser,
+                                              POSTGRES_PASSWORD=dbPassword,
+                                              POSTGRES_DB=dbDatabase,
+                                              POSTGRES_SERVER=db.db_instance_endpoint_address,
+                                              POSTGRES_PORT="3306",
+                                              POSTGRES_URL=f"postgresql+asyncpg://{dbUser}:{dbPassword}@{db.db_instance_endpoint_address}:3306/{dbDatabase}",
+                                          ),
                                           port_mappings=[ecs.PortMapping(
                                               container_port=applicationPort)],
                                           logging=ecs.LogDriver.aws_logs(

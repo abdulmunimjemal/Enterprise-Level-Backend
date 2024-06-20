@@ -1,7 +1,8 @@
-APP_VERSION?=DEV-SNAPSHOT
-APP_NAME?=mmbackend
+APP_VERSION?=0.0.1
+APP_NAME?=moodme
 PORT?=80
 
+PUBLISH_REPO=$(APP_NAME)-repo
 IMAGE_ID?=$(APP_NAME):$(APP_VERSION)
 IMAGE_SAVE_LOCATION?=./build/images
 OPENAPI_SAVE_LOCATION?=./build/openapi
@@ -81,4 +82,15 @@ check-lint: require-poetry
 	@poetry run flake8 --show-source --statistics --count .
 
 make check-code-quality: check-format check-lint
+
+# Docker ###################################
+docker-build:
+	@echo "Building docker image"
+	@docker build -t ${IMAGE_ID} .
+
+docker-push:
+	@echo "Tagging docker image"
+	@docker tag ${IMAGE_ID} ${PUBLISH_REPO}:${APP_VERSION}
+	@echo "Pushing docker image"
+	@docker push ${PUBLISH_REPO}:${APP_VERSION}
 

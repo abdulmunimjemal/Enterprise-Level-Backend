@@ -27,7 +27,6 @@ COPY pyproject.toml poetry.lock ./
 COPY . .
 RUN pip install poetry && poetry install && poetry run pybe generate-privkey
 
-
 # The runtime image, used to just run the code provided its virtual environment
 FROM --platform=linux/amd64 python:3.11-slim-buster as runtime
 
