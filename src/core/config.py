@@ -22,7 +22,7 @@ ExcludedField = Annotated[T, Field(exclude=True)]
 
 class AppSettings(BaseSettings):
     PROJECT_NAME: str = config("PROJECT_NAME", default="MoodMe")
-    PROJECT_DESCRIPTION: str = config("PROJECT_DESCRIPTION", default=None)
+    PROJECT_DESCRIPTION: str = config("PROJECT_DESCRIPTION", default="MoodMe backend")
     APP_VERSION: str = config("APP_VERSION", default="0.1.0")
 
 

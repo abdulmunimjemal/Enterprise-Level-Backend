@@ -1,6 +1,10 @@
 APP_VERSION?=0.0.1
 APP_NAME?=moodme
 PORT?=80
+AWS_PROFILE?=moodme
+ACCOUNT_NUMBER?=$(shell aws sts get-caller-identity --profile ${AWS_PROFILE} --query 'Account' --output text)
+
+GIT_SHA_FETCH := $(shell git rev-parse HEAD | cut -c 1-8)
 
 PUBLISH_REPO=$(APP_NAME)-repo
 IMAGE_ID?=$(APP_NAME):$(APP_VERSION)
@@ -86,11 +90,15 @@ make check-code-quality: check-format check-lint
 # Docker ###################################
 docker-build:
 	@echo "Building docker image"
-	@docker build -t ${IMAGE_ID} .
+	@docker build -t ${IMAGE_ID} -f Dockerfile.prod .
+
+docker-login:
+	@echo "Logging in to docker"
+	@aws ecr get-login-password --region us-east-1 --profile ${AWS_PROFILE} | docker login --username AWS --password-stdin ${ACCOUNT_NUMBER}.dkr.ecr.us-east-1.amazonaws.com
 
 docker-push:
 	@echo "Tagging docker image"
-	@docker tag ${IMAGE_ID} ${PUBLISH_REPO}:${APP_VERSION}
+	@docker tag ${IMAGE_ID} ${PUBLISH_REPO}:${GIT_SHA_FETCH}
 	@echo "Pushing docker image"
-	@docker push ${PUBLISH_REPO}:${APP_VERSION}
+	@docker push ${PUBLISH_REPO}:${GIT_SHA_FETCH}
 
