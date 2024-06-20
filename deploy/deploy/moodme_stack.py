@@ -170,25 +170,24 @@ class MoodMeStack(Stack):
         }
 
         # Create a migration
-        migrationLambdaCode = awslambda.Code.from_ecr_image(image=ecs.ContainerImage.from_ecr_repository(
+        migrationLambdaCode = awslambda.Code.from_ecr_image(
                                               repository=repo,
-                                              tag="latest"
-                                          ),
-                                          cmd=["alembic.config.main"],
-                                          )
+                                              tag_or_digest="latest",
+                                              cmd=["alembic.config.main"]
+                                              )
         migration_lambda = awslambda.Function(self, "MigrationLambda",
+                                              vpc=vpc,
                                               code=migrationLambdaCode,
                                               handler=awslambda.Handler.FROM_IMAGE,
                                               runtime=awslambda.Runtime.FROM_IMAGE,
                                               timeout=Duration.seconds(600),
                                               tracing=awslambda.Tracing.ACTIVE,
                                               environment=environment,
-                                              secrets=secrets,
                                               )
         migration_lambda.connections.allow_to(
             db,
             ec2.Port.tcp(5432),
-            "Allow from RDS"
+            "Allow from RDS",
         )
 
         taskRole = iam.Role(self, "ECS-TaskRole",

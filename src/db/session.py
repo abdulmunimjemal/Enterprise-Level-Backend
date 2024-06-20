@@ -11,11 +11,10 @@ logger = logging.getLogger(__name__)
 
 
 # Define the database URI and URL based on the application settings
-DATABASE_URI = f"{settings.POSTGRES_ASYNC_URI}"
-DATABASE_URL = DATABASE_URI
+POSTGRES_ASYNC_URI = f"{settings.POSTGRES_ASYNC_URI}"
 
 # Create an async database engine
-async_engine = create_async_engine(DATABASE_URL, echo=False, future=True)
+async_engine = create_async_engine(POSTGRES_ASYNC_URI, echo=False, future=True)
 
 # Create a local session class using the async engine
 local_session = sessionmaker(
