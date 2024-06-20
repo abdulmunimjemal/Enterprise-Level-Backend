@@ -1,10 +1,5 @@
 FROM --platform=linux/amd64 python:3.11-buster as builder
 
-ARG AWS_ACCESS_KEY_ID
-ARG AWS_SECRET_ACCESS_KEY
-ARG AWS_PROFILE=moodme
-ARG AWS_REGION=us-east-1
-
 RUN pip install poetry
 
 ENV POETRY_NO_INTERACTION=1 \
@@ -14,7 +9,6 @@ ENV POETRY_NO_INTERACTION=1 \
 
 ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
     AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
-    AWS_PROFILE=${AWS_PROFILE} \
     AWS_REGION=${AWS_REGION}
 
 WORKDIR /app
@@ -37,16 +31,6 @@ COPY pyproject.toml poetry.lock ./
 COPY . .
 RUN pip install poetry && poetry install && poetry run pybe generate-privkey
 
-FROM --platform=linux/amd64 python:3.11-slim-buster as aws_creds
-
-WORKDIR /app
-RUN mkdir -p /root/.aws && cat <<EOF > /root/.aws/credentials
-[${AWS_PROFILE}]
-aws_access_key_id = ${AWS_ACCESS_KEY_ID}
-aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}
-aws_region = ${AWS_REGION}
-EOF
-
 # The runtime image, used to just run the code provided its virtual environment
 FROM --platform=linux/amd64 python:3.11-slim-buster as runtime
 
@@ -59,7 +43,6 @@ WORKDIR /app
 
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 COPY --from=certmaster /app/certs ./certs
-COPY --from=aws_creds /root/.aws /root/.aws
 
 COPY . .
 COPY alembic.ini ./app/alembic.ini

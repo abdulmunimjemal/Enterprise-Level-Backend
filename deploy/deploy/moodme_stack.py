@@ -59,11 +59,16 @@ class MoodMeStack(Stack):
         aws_secret = secrets_manager.Secret.from_secret_name_v2(self, "AccessSecret", secret_name="/moodme/aws/keys")
         db_secrets = secrets_manager.Secret.from_secret_name_v2(self, "DBSecretID", secret_name="/moodme/database/creds")
 
-        dbUser = db_secrets.get_secret_value(self, "username")
-        dbPassword = db_secrets.get_secret_value(self, "password")
-        dbDatabase = db_secrets.get_secret_value(self, "dbname")
-        dbHost = db_secrets.get_secret_value(self, "host")
-        dbPort = db_secrets.get_secret_value(self, "port")
+
+        dbUser = ecs.Secret.from_secrets_manager(db_secrets, "username")
+        dbPassword = ecs.Secret.from_secrets_manager(db_secrets, "password")
+        dbDatabase = ecs.Secret.from_secrets_manager(db_secrets, "dbname")
+        dbHost = ecs.Secret.from_secrets_manager(db_secrets, "host")
+        dbPort = ecs.Secret.from_secrets_manager(db_secrets, "port")
+
+        aws_access_key_id = ecs.Secret.from_secrets_manager(aws_secret, "AWS_ACCESS_KEY_ID")
+        aws_secret_access_key = ecs.Secret.from_secrets_manager(aws_secret, "AWS_SECRET_ACCESS_KEY")
+        aws_region = ecs.Secret.from_secrets_manager(aws_secret, "AWS_REGION")
         
         # Get VPC
         # vpcId = ssm.StringParameter.value_from_lookup(self, f"/{namespace}/vpc/id")
@@ -211,16 +216,18 @@ class MoodMeStack(Stack):
                                               # "DATABASE_URL": ssm.StringParameter.value_from_lookup(self, f"/{namespace}/database/url"),
                                               # "SECRET_KEY": ssm.StringParameter.value_from_lookup(self, f"/{namespace}/secret/key"),
                                               AWS_MODEL_BUCKET=model_bucket.bucket_name,
-                                              POSTGRES_USER=dbUser,
-                                              POSTGRES_PASSWORD=dbPassword,
-                                              POSTGRES_DB=dbDatabase,
-                                              POSTGRES_SERVER=dbHost,
-                                              POSTGRES_PORT=dbPort,
                                               POSTGRES_URL=f"postgresql+asyncpg://{dbUser}:{dbPassword}@{dbHost}:{dbPort}/{dbDatabase}",
-                                              AWS_ACCESS_KEY_ID=aws_secret.get_secret_value(self, "AWS_ACCESS_KEY_ID"),
-                                              AWS_SECRET_ACCESS_KEY=aws_secret.get_secret_value(self, "AWS_SECRET_ACCESS_KEY"),
-                                              AWS_REGION=aws_secret.get_secret_value(self, "AWS_REGION"),
                                           ),
+                                          secrets={
+                                                "POSTGRES_PASSWORD": dbPassword,
+                                                "POSTGRES_DB": dbDatabase,
+                                                "POSTGRES_SERVER": dbHost,
+                                                "POSTGRES_PORT": dbPort,
+                                                "POSTGRES_USER": dbUser,
+                                                "AWS_ACCESS_KEY_ID": aws_access_key_id,
+                                                "AWS_SECRET_ACCESS_KEY": aws_secret_access_key,
+                                                "AWS_REGION": aws_region
+                                          },
                                           port_mappings=[ecs.PortMapping(
                                               container_port=applicationPort)],
                                           logging=ecs.LogDriver.aws_logs(
@@ -287,9 +294,8 @@ class MoodMeStack(Stack):
                                             comment="A record for the backend",
                                             record_name=hostedZoneName,
                                             zone=hostedZone,
-                                            target=route53.RecordTarget.from_alias(
-                                                route53_targets.LoadBalancerTarget(alb)),
-                                            ttl=Duration.seconds(300)
+                                            target=route53.RecordTarget.from_alias(route53_targets.LoadBalancerTarget(alb)),
+                                            ttl=Duration.seconds(120)
                                             )
 
         CfnOutput(self, "Load balancer ALB DNS name",
