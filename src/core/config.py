@@ -55,7 +55,7 @@ class PostgresSettings(DatabaseSettings):
     POSTGRES_SERVER: str = config("POSTGRES_SERVER", default="db")
     POSTGRES_PORT: int = config("POSTGRES_PORT", default=5432)
     POSTGRES_DB: str = config("POSTGRES_DB", default="postgres")
-    POSTGRES_ASYNC_URI: PostgresDsn | str = config("POSTGRES_ASYNC_URI",default="postgresql+asyncpg://postgres:postgres@db:5432/pybe")
+    POSTGRES_ASYNC_URI: PostgresDsn | str = config("POSTGRES_ASYNC_URI", default="")
 
     @field_validator("POSTGRES_ASYNC_URI", mode="after")
     def assemble_db_connection(cls, v: str | None, info: ValidationInfo) -> Any:
@@ -73,17 +73,11 @@ class PostgresSettings(DatabaseSettings):
 
 
 class CORSSettings(BaseSettings):
-    CORS_ALLOW_ORIGINS: List[str] | str = config(
-        "CORS_ALLOW_ORIGINS", default="*"
-    ).split(",")
+    CORS_ALLOW_ORIGINS: List[str] | str = config("CORS_ALLOW_ORIGINS", default="*").split(",")
     CORS_ALLOW_METHODS: List[str] | str = config("CORS_ALLOW_METHODS", default="*").upper().split(",")  # fmt: skip
-    CORS_ALLOW_HEADERS: List[str] | str = config(
-        "CORS_ALLOW_HEADERS", default="*"
-    ).split(",")
+    CORS_ALLOW_HEADERS: List[str] | str = config("CORS_ALLOW_HEADERS", default="*").split(",")
     CORS_ALLOW_CREDENTIALS: bool = config("CORS_ALLOW_CREDENTIALS", default="False").lower() == "true"  # fmt: skip
-    CORS_EXPOSE_HEADERS: List[str] | str = config(
-        "CORS_EXPOSE_HEADERS", default=""
-    ).split(",")
+    CORS_EXPOSE_HEADERS: List[str] | str = config("CORS_EXPOSE_HEADERS", default="").split(",")
     CORS_MAX_AGE: int = int(config("CORS_MAX_AGE", default="600"))
 
 
