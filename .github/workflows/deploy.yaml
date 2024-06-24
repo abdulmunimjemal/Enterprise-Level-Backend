@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
 env:
-  AWS_ECS_REPO: 971670226036.dkr.ecr.us-east-1.amazonaws.com/moodme-repo:latest
+  AWS_ECS_REPO: 971670226036.dkr.ecr.us-east-1.amazonaws.com/moodme-repo
   MIGRATION_LAMBDA_NAME: moodme-migration-lambda
   CLUSTER_NAME: moodme-cluster
   SERVICE_ARN: arn:aws:ecs:us-east-1:971670226036:service/moodme-cluster/DeployStack-MoodMeService54BA9657-DQdRa8tjoOMA
