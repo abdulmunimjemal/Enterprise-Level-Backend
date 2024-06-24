@@ -24,6 +24,7 @@ class AppSettings(BaseSettings):
     PROJECT_NAME: str = config("PROJECT_NAME", default="MoodMe")
     PROJECT_DESCRIPTION: str = config("PROJECT_DESCRIPTION", default="MoodMe backend")
     APP_VERSION: str = config("APP_VERSION", default="0.1.0")
+    APP_PORT: int = config("APP_PORT", default=8000)
 
 
 class AWSSettings(BaseSettings):

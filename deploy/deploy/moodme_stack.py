@@ -98,7 +98,6 @@ class MoodMeStack(Stack):
 
         albSecurityGroup = ec2.SecurityGroup(self, "ALBSecurityGroup", vpc=vpc, allow_all_outbound=True)
         albSecurityGroup.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(443), "Allow HTTPS traffic")
-
         albSecurityGroup.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(80), "Allow HTTP traffic")
 
         alb.connections.add_security_group(albSecurityGroup)
@@ -143,9 +142,7 @@ class MoodMeStack(Stack):
         }
 
         # Create a migration
-        migrationLambdaCode = awslambda.Code.from_ecr_image(
-            repository=repo, tag_or_digest="latest", cmd=["alembic", "upgrade", "head"]
-        )
+        migrationLambdaCode = awslambda.Code.from_ecr_image(repository=repo, cmd=["main.handler"])
         migration_lambda = awslambda.Function(
             self,
             "MigrationLambda",
@@ -199,7 +196,7 @@ class MoodMeStack(Stack):
 
         container = taskDef.add_container(
             "MoodMeContainer",
-            image=ecs.ContainerImage.from_ecr_repository(repository=repo, tag="latest"),
+            image=ecs.ContainerImage.from_ecr_repository(repository=repo),
             #   image=ecs.ContainerImage.from_asset(path.join(path.dirname(__file__), "../../")),
             memory_limit_mib=1024,
             memory_reservation_mib=512,
@@ -213,6 +210,14 @@ class MoodMeStack(Stack):
 
         ecsSG = ec2.SecurityGroup(self, "ECS-SecurityGroup", vpc=vpc, allow_all_outbound=True)
         ecsSG.connections.allow_from(albSecurityGroup, ec2.Port.tcp(applicationPort), "Allow from ALB to ECS")
+        ecsSG.connections.allow_from_any_ipv4(ec2.Port.tcp(applicationPort), "Allow from VPC")
+        alb.connections.add_security_group(ecsSG)
+
+        vpc.add_interface_endpoint(
+            "ECR",
+            service=ec2.InterfaceVpcEndpointService(f"com.amazonaws.{self.region}.ecs"),
+            security_groups=[albSecurityGroup, ecsSG],
+        )
 
         service = ecs.FargateService(
             self,
@@ -239,12 +244,13 @@ class MoodMeStack(Stack):
         )
 
         listener = alb.add_listener(
-            "HttpListener",
+            "HttpsListener",
             open=True,
             port=443,
+            certificates=[cert],
         )
-        listener.add_certificates("input-cert", certificates=[cert])
 
+        listener.add_certificates("input-cert", certificates=[cert])
         listener.add_target_groups("TargetGroups", target_groups=[targetGroupHttp])
 
         service.attach_to_application_target_group(targetGroupHttp)

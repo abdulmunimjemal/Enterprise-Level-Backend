@@ -29,7 +29,7 @@ WORKDIR /app
 COPY --from=builder /app/.venv /app/.venv
 COPY pyproject.toml poetry.lock ./
 COPY . .
-# RUN pip install poetry && poetry install && poetry run pybe generate-privkey
+RUN pip install poetry && poetry install && poetry run pybe generate-privkey
 
 # The runtime image, used to just run the code provided its virtual environment
 FROM --platform=linux/amd64 python:3.11-slim-buster as runtime
@@ -42,7 +42,7 @@ ENV VIRTUAL_ENV=/app/.venv \
 WORKDIR /app
 
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
-# COPY --from=certmaster /app/certs ./certs
+COPY --from=certmaster /app/certs ./certs
 
 COPY . .
 COPY alembic.ini ./app/alembic.ini
@@ -53,7 +53,10 @@ RUN python -m venv /app/.venv \
     && python3 -m pip install poetry \
     && poetry install
 
+ENV APP_PORT=80
+ENV PRIVATE_KEY_PATH=/app/certs/private.key
+
 # RUN ${VIRTUAL_ENV}/bin/poetry run pybe generate-privkey
 
 # fastapi run src/main.py --port 80
-CMD ["fastapi", "run", "src/main.py", "--port", "80", "--host", "0.0.0.0"]
+CMD ["fastapi", "run", "src/main.py", "--port", "${APP_PORT}", "--host", "0.0.0.0"]

@@ -58,7 +58,8 @@ async def shutdown_logging() -> None:
 
 @asynccontextmanager
 async def lifespan(_entrypoint: FastAPI):
-    await ensure_private_key_exists()
+    # TODO:
+    # await ensure_private_key_exists()
     await set_threadpool_tokens()
     # await create_tables()
     yield
@@ -110,9 +111,7 @@ def create_app(
 
                 @docs_router.get("/docs", include_in_schema=False)
                 async def get_swagger_documentation() -> fastapi.responses.HTMLResponse:
-                    return get_swagger_ui_html(
-                        openapi_url="/openapi.json", title="docs"
-                    )
+                    return get_swagger_ui_html(openapi_url="/openapi.json", title="docs")
 
                 @docs_router.get("/redoc", include_in_schema=False)
                 async def get_redoc_documentation() -> fastapi.responses.HTMLResponse:
