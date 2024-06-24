@@ -9,6 +9,7 @@ env:
   MIGRATION_LAMBDA_NAME: moodme-migration-lambda
   CLUSTER_NAME: moodme-cluster
   SERVICE_NAME: DeployStack-MoodMeService54BA9657-DQdRa8tjoOMA
+  CONTAINER_NAME: moodme-container
 
 jobs:
   build-container-and-push-to-registry:
@@ -43,7 +44,7 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task-definition.json
-          container-name: my-container
+          container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
 
       - name: Deploy Amazon ECS task definition
@@ -65,7 +66,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east
+          aws-region: us-east-1
       - uses: actions/checkout@v2
       - name: "Update migration lambda code"
         run: |
