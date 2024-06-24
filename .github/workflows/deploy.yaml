@@ -4,10 +4,11 @@ on:
   push:
     branches: [main]
 env:
-  AWS_ECS_REPO: 971670226036.dkr.ecr.us-east-1.amazonaws.com/moodme-repo
+  # AWS_ECS_REPO: 971670226036.dkr.ecr.us-east-1.amazonaws.com/moodme-repo
+  AWS_ECS_REPO: moodme-repo
   MIGRATION_LAMBDA_NAME: moodme-migration-lambda
   CLUSTER_NAME: moodme-cluster
-  SERVICE_ARN: arn:aws:ecs:us-east-1:971670226036:service/moodme-cluster/DeployStack-MoodMeService54BA9657-DQdRa8tjoOMA
+  SERVICE_NAME: DeployStack-MoodMeService54BA9657-DQdRa8tjoOMA
 
 jobs:
   build-container-and-push-to-registry:
@@ -49,7 +50,7 @@ jobs:
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: ${{ env.SERVICE_ARN }}
+          service: ${{ env.SERVICE_NAME }}
           cluster: ${{ env.CLUSTER_NAME }}
           wait-for-service-stability: true
 
