@@ -283,5 +283,7 @@ class MoodMeStack(Stack):
 
         CfnOutput(self, "Load balancer ALB DNS name", value=alb.load_balancer_dns_name)
         CfnOutput(self, "Model Bucket Name", value=model_bucket.bucket_name)
+        CfnOutput(self, "ServiceTask Definition", value=taskDef.task_definition_arn)
+        CfnOutput(self, "Cluster arn", value=cluster.cluster_arn)
 
         # PipelineStack(self, "PipelineStack", **kwargs)

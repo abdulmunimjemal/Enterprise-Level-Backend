@@ -5,10 +5,9 @@ on:
     branches: [main]
 env:
   AWS_ECS_REPO: 971670226036.dkr.ecr.us-east-1.amazonaws.com/moodme-repo:latest
-  MIGRATION_LAMBDA_NAME: DeployStack-MigrationLambdaDC97547E-QOv1iEgaVzrf
-  SERVICE_NAME: moodme-service
+  MIGRATION_LAMBDA_NAME: moodme-migration-lambda
   CLUSTER_NAME: moodme-cluster
-  CONTAINER_NAME: moodme-cluster
+  SERVICE_ARN: arn:aws:ecs:us-east-1:971670226036:service/moodme-cluster/DeployStack-MoodMeService54BA9657-DQdRa8tjoOMA
 
 jobs:
   build-container-and-push-to-registry:
@@ -26,13 +25,13 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Build, tag, and push image to Amazon ECR
-        id: build-image
+      
+      - name: "Push image to ECR"
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ env.AWS_ECS_REPO }}
           IMAGE_TAG: ${{ github.sha }}
+
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . -f Dockerfile.prod
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
@@ -43,23 +42,18 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task-definition.json
-          container-name: ${{ env.CONTAINER_NAME }}
+          container-name: my-container
           image: ${{ steps.build-image.outputs.image }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: ${{ env.SERVICE_NAME }}
+          service: ${{ env.SERVICE_ARN }}
           cluster: ${{ env.CLUSTER_NAME }}
           wait-for-service-stability: true
 
 
-      # - name: "Push image to ECR"
-      #   env:
-      #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-      #     IMAGE_TAG: latest
-      #   run: docker push ${{ env.AWS_ECS_REPO }}
   update-migration-lambda-and-run:
     name: "Update migration lambda and run migrations"
     runs-on: ubuntu-latest
@@ -70,7 +64,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          aws-region: us-east
       - uses: actions/checkout@v2
       - name: "Update migration lambda code"
         run: |
