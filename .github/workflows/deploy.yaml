@@ -9,7 +9,7 @@ env:
   MIGRATION_LAMBDA_NAME: moodme-migration-lambda
   CLUSTER_NAME: moodme-cluster
   SERVICE_NAME: DeployStack-MoodMeService54BA9657-DQdRa8tjoOMA
-  CONTAINER_NAME: moodme-container
+  CONTAINER_NAME: MoodMeContainer
   TASK_DEFINITION_FAMILY: moodme-task
 
 jobs:
