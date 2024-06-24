@@ -27,10 +27,6 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: "Build container image"
-        run: docker build -t ${{ env.AWS_ECS_REPO }} . -f Dockerfile.prod
-        uses: aws-actions/amazon-ecr-login@v1
-
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
@@ -38,7 +34,7 @@ jobs:
           ECR_REPOSITORY: ${{ env.AWS_ECS_REPO }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . -f Dockerfile.prod
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
