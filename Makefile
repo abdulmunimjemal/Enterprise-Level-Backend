@@ -10,7 +10,8 @@ PUBLISH_REPO=$(APP_NAME)-repo
 IMAGE_ID?=$(APP_NAME):$(GIT_SHA_FETCH)
 IMAGE_SAVE_LOCATION?=./build/images
 OPENAPI_SAVE_LOCATION?=./build/openapi
-
+MANIFEST?=$(shell aws ecr batch-get-image --repository-name ${PUBLISH_REPO} --image-ids imageTag=latest --region us-east-1 --query 'images[].imageManifest' --output text)
+SERVICE?=$(shell aws ecs --profile ${AWS_PROFILE} list-services --cluster moodme-cluster --output text --query 'serviceArns[0]')
 # App ###################################
 clean-app: require-poetry
 	@echo "Cleaning application"
@@ -101,6 +102,7 @@ docker-push:
 	@docker tag ${IMAGE_ID} ${ACCOUNT_NUMBER}.dkr.ecr.us-east-1.amazonaws.com/${PUBLISH_REPO}:${GIT_SHA_FETCH}
 	@echo "Push docker image with tag ${GIT_SHA_FETCH}"
 	@docker push ${ACCOUNT_NUMBER}.dkr.ecr.us-east-1.amazonaws.com/${PUBLISH_REPO}:${GIT_SHA_FETCH}
+	@aws ecs --profile ${AWS_PROFILE} update-service --cluster moodme-cluster --service ${SERVICE} --force-new-deployment --region us-east-1
 
 deploy:
 	@echo "Deploying to ECS"

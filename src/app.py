@@ -89,8 +89,8 @@ def create_app(
 
     app_ = FastAPI(lifespan=lifespan, **kwargs)
 
-    if isinstance(settings, SecuritySettings):
-        app_.add_event_handler("startup", ensure_private_key_exists)
+    # if isinstance(settings, SecuritySettings):
+    #     app_.add_event_handler("startup", ensure_private_key_exists)
 
     if isinstance(settings, CORSSettings):
         app_.add_middleware(

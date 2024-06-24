@@ -55,6 +55,8 @@ RUN python -m venv /app/.venv \
 
 ENV APP_PORT=80
 ENV PRIVATE_KEY_PATH=/app/certs/private.key
+# EW
+RUN echo "PRIVATE_KEY_PATH=/app/certs/private.key" >> /app/.env
 
 # RUN ${VIRTUAL_ENV}/bin/poetry run pybe generate-privkey
 

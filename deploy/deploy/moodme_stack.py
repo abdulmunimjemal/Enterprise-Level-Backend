@@ -16,6 +16,8 @@ from aws_cdk import (
     aws_lambda as awslambda,
     aws_elasticloadbalancingv2 as elb,
     aws_secretsmanager as secrets_manager,
+    aws_ecs_patterns as ecs_patterns,
+    aws_elasticloadbalancingv2 as elbv2,
 )
 from aws_cdk import CfnOutput, Duration
 from .app import __version__
@@ -202,15 +204,23 @@ class MoodMeStack(Stack):
             memory_reservation_mib=512,
             environment=environment,
             secrets=secrets,
-            port_mappings=[ecs.PortMapping(container_port=applicationPort)],
             logging=ecs.LogDriver.aws_logs(stream_prefix="moodme"),
         )
 
-        container.add_port_mappings(ecs.PortMapping(container_port=applicationPort))
+        port_mapping = ecs.PortMapping(
+            container_port=applicationPort,
+            protocol=ecs.Protocol.TCP,
+        )
+
+        container.add_port_mappings(port_mapping)
 
         ecsSG = ec2.SecurityGroup(self, "ECS-SecurityGroup", vpc=vpc, allow_all_outbound=True)
         ecsSG.connections.allow_from(albSecurityGroup, ec2.Port.tcp(applicationPort), "Allow from ALB to ECS")
         ecsSG.connections.allow_from_any_ipv4(ec2.Port.tcp(applicationPort), "Allow from VPC")
+        ecsSG.connections.allow_from(
+            alb, port_range=ec2.Port.tcp_range(32768, 65535), description="allow incoming traffic from ALB"
+        )
+
         alb.connections.add_security_group(ecsSG)
 
         vpc.add_interface_endpoint(
@@ -241,6 +251,8 @@ class MoodMeStack(Stack):
         targetGroupHttp.configure_health_check(
             path="/health",
             protocol=elb.Protocol.HTTP,
+            interval=Duration.seconds(60),
+            timeout=Duration.seconds(5),
         )
 
         listener = alb.add_listener(
