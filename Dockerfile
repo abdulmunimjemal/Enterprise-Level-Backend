@@ -54,4 +54,4 @@ RUN python -m venv /app/.venv \
 ENV APP_PORT=80
 
 # fastapi run src/main.py --port 80
-CMD ["fastapi", "run", "src/main.py", "--port", "${APP_PORT}", "--host", "0.0.0.0"]
+CMD ["fastapi", "run", "src/main.py", "--port", "80", "--host", "0.0.0.0"]
