@@ -104,6 +104,15 @@ docker-push:
 	@docker push ${ACCOUNT_NUMBER}.dkr.ecr.us-east-1.amazonaws.com/${PUBLISH_REPO}:${GIT_SHA_FETCH}
 	@aws ecs --profile ${AWS_PROFILE} update-service --cluster moodme-cluster --service ${SERVICE} --force-new-deployment --region us-east-1
 
+docker-push-new-latest:
+	@echo "Removing current latest"
+	@aws --profile ${AWS_PROFILE} ecr batch-delete-image --repository-name ${PUBLISH_REPO} --image-ids imageTag=latest
+	@echo "Tagging docker image"
+	@docker tag ${IMAGE_ID} ${ACCOUNT_NUMBER}.dkr.ecr.us-east-1.amazonaws.com/${PUBLISH_REPO}:latest
+	@echo "Push docker image with tag latest"
+	@docker push ${ACCOUNT_NUMBER}.dkr.ecr.us-east-1.amazonaws.com/${PUBLISH_REPO}:latest
+	@aws ecs --profile ${AWS_PROFILE} update-service --cluster moodme-cluster --service ${SERVICE} --force-new-deployment --region us-east-1
+
 deploy:
 	@echo "Deploying to ECS"
 	@cd deploy && cdk deploy --profile ${AWS_PROFILE}

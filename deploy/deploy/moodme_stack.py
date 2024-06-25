@@ -198,7 +198,7 @@ class MoodMeStack(Stack):
 
         container = taskDef.add_container(
             "MoodMeContainer",
-            image=ecs.ContainerImage.from_ecr_repository(repository=repo),
+            image=ecs.ContainerImage.from_ecr_repository(repository=repo, tag="latest"),
             #   image=ecs.ContainerImage.from_asset(path.join(path.dirname(__file__), "../../")),
             memory_limit_mib=1024,
             memory_reservation_mib=512,
