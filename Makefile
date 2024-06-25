@@ -106,7 +106,7 @@ docker-push:
 
 docker-push-new-latest:
 	@echo "Removing current latest"
-	@aws --profile ${AWS_PROFILE} ecr batch-delete-image --repository-name ${PUBLISH_REPO} --image-ids imageTag=latest
+	@aws --profile ${AWS_PROFILE} ecr batch-delete-image --repository-name ${PUBLISH_REPO} --image-ids imageTag=latest 2>/dev/null
 	@echo "Tagging docker image"
 	@docker tag ${IMAGE_ID} ${ACCOUNT_NUMBER}.dkr.ecr.us-east-1.amazonaws.com/${PUBLISH_REPO}:latest
 	@echo "Push docker image with tag latest"

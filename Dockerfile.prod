@@ -7,10 +7,6 @@ ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_CREATE=1 \
     POETRY_CACHE_DIR=/tmp/poetry_cache
 
-ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
-    AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
-    AWS_REGION=${AWS_REGION}
-
 WORKDIR /app
 
 COPY pyproject.toml poetry.lock ./
@@ -59,6 +55,7 @@ ENV PRIVATE_KEY_PATH=/app/certs/private.key
 RUN echo "PRIVATE_KEY_PATH=/app/certs/private.key" >> /app/.env
 
 # RUN ${VIRTUAL_ENV}/bin/poetry run pybe generate-privkey
+ENV APP_PORT=80
 
-# fastapi run src/main.py --port 80
-CMD ["fastapi", "run", "src/main.py", "--port", "${APP_PORT}", "--host", "0.0.0.0"]
+    # fastapi run src/main.py --port 80
+CMD ["fastapi", "run", "src/main.py", "--port", "80", "--host", "0.0.0.0"]

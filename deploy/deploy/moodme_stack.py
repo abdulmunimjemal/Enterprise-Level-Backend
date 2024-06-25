@@ -126,10 +126,19 @@ class MoodMeStack(Stack):
         ecrStack = EcrStack(self, "EcrStack", vpc=vpc, **kwargs)
         repo = ecrStack.get_repo()
 
+        taskRole = iam.Role(
+            self,
+            "ECS-TaskRole",
+            assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
+            role_name=f"{namespace}-task-role",
+            description="Role for MoodMe tasks",
+        )
+
         environment = dict(
             # "DATABASE_URL": ssm.StringParameter.value_from_lookup(self, f"/{namespace}/database/url"),
             # "SECRET_KEY": ssm.StringParameter.value_from_lookup(self, f"/{namespace}/secret/key"),
             AWS_MODEL_BUCKET=model_bucket.bucket_name,
+            AWS_ROLE_ARN=taskRole.role_arn,
             # POSTGRES_ASYNC_URI=f"postgresql+asyncpg://{dbUser}:{dbPassword}@{dbHost}:{dbPort}/{dbDatabase}",
         )
         secrets = {
@@ -141,6 +150,9 @@ class MoodMeStack(Stack):
             "AWS_ACCESS_KEY_ID": aws_access_key_id,
             "AWS_SECRET_ACCESS_KEY": aws_secret_access_key,
             "AWS_REGION": aws_region,
+            # "AWS_ACCESS_KEY_ID": aws_secret.secret_value_from_json("AWS_ACCESS_KEY_ID").to_string(),
+            # "AWS_SECRET_ACCESS_KEY": aws_secret.secret_value_from_json("AWS_SECRET_ACCESS_KEY").to_string(),
+            # "AWS_REGION": aws_secret.secret_value_from_json("AWS_REGION").to_string(),
         }
 
         # Create a migration
@@ -162,13 +174,13 @@ class MoodMeStack(Stack):
             "Allow from RDS",
         )
 
-        taskRole = iam.Role(
-            self,
-            "ECS-TaskRole",
-            assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
-            role_name=f"{namespace}-task-role",
-            description="Role for MoodMe tasks",
-        )
+        # taskRole = iam.Role(
+        #     self,
+        #     "ECS-TaskRole",
+        #     assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
+        #     role_name=f"{namespace}-task-role",
+        #     description="Role for MoodMe tasks",
+        # )
 
         taskRole.attach_inline_policy(
             iam.Policy(
@@ -198,7 +210,7 @@ class MoodMeStack(Stack):
 
         container = taskDef.add_container(
             "MoodMeContainer",
-            image=ecs.ContainerImage.from_ecr_repository(repository=repo, tag="latest"),
+            image=ecs.ContainerImage.from_ecr_repository(repository=repo),
             #   image=ecs.ContainerImage.from_asset(path.join(path.dirname(__file__), "../../")),
             memory_limit_mib=512,
             memory_reservation_mib=256,
