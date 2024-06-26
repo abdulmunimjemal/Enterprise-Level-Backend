@@ -1,5 +1,5 @@
 __pycache__/
-!.env
+.env
 .env.*.testmondata*
 .testmondata
 .testmondata-*
@@ -13,3 +13,5 @@ certs/
 .venv
 .devcontainer
 deploy
+**.env**
+.envrc

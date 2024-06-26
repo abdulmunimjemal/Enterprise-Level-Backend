@@ -40,9 +40,8 @@ WORKDIR /app
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 COPY --from=certmaster /app/certs ./certs
 
-COPY .env .
 COPY . .
-COPY alembic.ini ./app/alembic.ini
+COPY alembic.ini /app/alembic.ini
 # I can't stand this next part... we'll have to figure it out
 
 RUN python -m venv /app/.venv \

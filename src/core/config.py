@@ -28,7 +28,7 @@ class AppSettings(BaseSettings):
 
 
 class AWSSettings(BaseSettings):
-    AWS_PROFILE: Optional[str] = config("AWS_PROFILE", default="default")
+    AWS_PROFILE: Optional[str] = config("AWS_PROFILE", default=None)
     AWS_REGION: Optional[str] = config("AWS_REGION", default="us-east-1")
     AWS_ACCESS_KEY_ID: Optional[str] = config("AWS_ACCESS_KEY_ID", default=None)
     AWS_SECRET_ACCESS_KEY: Optional[str] = config("AWS_SECRET_ACCESS_KEY", default=None)
