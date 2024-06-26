@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
 env:
-  # AWS_ECS_REPO: 971670226036.dkr.ecr.us-east-1.amazonaws.com/moodme-repo
+  AWS_ACCOUNT_ID: 971670226036
   AWS_ECS_REPO: moodme-repo
   MIGRATION_LAMBDA_NAME: moodme-migration-lambda
   CLUSTER_NAME: moodme-cluster
@@ -73,10 +73,14 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
+
       - uses: actions/checkout@v2
+      
       - name: "Update migration lambda code"
+        env:
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          aws lambda update-function-code --function-name ${{ env.MIGRATION_LAMBDA_NAME }} --image-uri ${{ env.AWS_ECS_REPO }} --publish
+          aws lambda update-function-code --function-name ${{ env.MIGRATION_LAMBDA_NAME }} --image-uri 971670226036.dkr.ecr.us-east-1.amazonaws.com/${{ env.AWS_ECS_REPO }}:$IMAGE_TAG --publish
       - name: "Wait 30 seconds"
         run: |
           sleep 30
