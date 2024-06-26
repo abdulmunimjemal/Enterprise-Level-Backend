@@ -8,7 +8,7 @@ env:
   AWS_ECS_REPO: moodme-repo
   MIGRATION_LAMBDA_NAME: moodme-migration-lambda
   CLUSTER_NAME: moodme-cluster
-  SERVICE_NAME: Deploy-ALBAE-7XfkeLyzTUnN
+  SERVICE_NAME: moodme-service
   CONTAINER_NAME: MoodMeContainer
   TASK_DEFINITION_FAMILY: moodme-task
 

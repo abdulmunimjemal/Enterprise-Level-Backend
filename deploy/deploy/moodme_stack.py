@@ -244,6 +244,7 @@ class MoodMeStack(Stack):
         service = ecs.FargateService(
             self,
             "MoodMeService",
+            service_name=f"{namespace}-service",
             cluster=cluster,
             desired_count=min_capacity,
             task_definition=taskDef,
