@@ -160,6 +160,7 @@ class MoodMeStack(Stack):
         migration_lambda = awslambda.Function(
             self,
             "MigrationLambda",
+            function_name=f"{namespace}-migration-lambda",
             vpc=vpc,
             code=migrationLambdaCode,
             handler=awslambda.Handler.FROM_IMAGE,
