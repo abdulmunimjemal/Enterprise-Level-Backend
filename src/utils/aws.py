@@ -18,9 +18,6 @@ config = Config(
 
 def create_aws_session():
     try:
-        print(f"AWS_ACCESS_KEY_ID: {settings.AWS_ACCESS_KEY_ID}")
-        print(f"AWS_SECRET_ACCESS_KEY: {settings.AWS_SECRET_ACCESS_KEY}")
-        print(f"AWS_PROFILE: {settings.AWS_PROFILE}")
         if settings.AWS_ACCESS_KEY_ID and settings.AWS_SECRET_ACCESS_KEY:
             svc = boto3.Session(
                 aws_access_key_id=settings.AWS_ACCESS_KEY_ID,

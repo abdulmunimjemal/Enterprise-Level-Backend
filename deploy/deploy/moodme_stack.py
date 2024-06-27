@@ -156,7 +156,7 @@ class MoodMeStack(Stack):
         }
 
         # Create a migration
-        migrationLambdaCode = awslambda.Code.from_ecr_image(repository=repo, cmd=["alembic.config.main"])
+        migrationLambdaCode = awslambda.Code.from_ecr_image(repository=repo, cmd=["main.handler"])
         migration_lambda = awslambda.Function(
             self,
             "MigrationLambda",
